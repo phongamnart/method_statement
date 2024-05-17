@@ -4,13 +4,13 @@ include("connect.php");
 function generateDocNo($major, $conn) {
     $prefix = '';
     switch ($major) {
-        case 'civil':
+        case 'Civil':
             $prefix = 'MS-CE-';
             break;
-        case 'electrical':
+        case 'Electrical':
             $prefix = 'MS-EE-';
             break;
-        case 'mechanical':
+        case 'Mechanical':
             $prefix = 'MS-ME-';
             break;
     }
@@ -46,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mkdir('saved_files', 0777, true);
     }
 
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $newname)) {
-        $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, dateCreate, owner) 
+    if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
+        $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, date, owner) 
                 VALUES ('$major', '$doc_no', '$doc_name' , '$newname', NOW(), '$owner')";
 
         echo $sql;

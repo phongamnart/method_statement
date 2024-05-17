@@ -27,6 +27,13 @@
             margin-bottom: 20px;
         }
     </style>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this employee?")) {
+                location.href = 'delete.php?id=' + id;
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>List Documents</h1>
@@ -64,9 +71,9 @@
                 echo "<td>{$row['major']}</td>";
                 echo "<td>{$row['doc_no']}</td>";
                 echo "<td>{$row['doc_name']}</td>";
-                echo "<td>{$row['dateCreate']}</td>";
+                echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
-                echo "<td><button onclick(window.open'download.php?file={$row['doc_file']}')>revise</button>&nbsp;&nbsp;<button>delete</button></td>";
+                echo "<td><button onclick(window.open'download.php?file={$row['doc_file']}')>revise</button>&nbsp;&nbsp;<button onclick='confirmDelete({$row['id']})'>delete</button></td>";
                 echo "</tr>";
             }
         }

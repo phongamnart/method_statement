@@ -25,9 +25,9 @@
     <form action="create_doc_be.php" method="post" enctype="multipart/form-data">
         <label for="major">Major:</label>
         <select name="major" id="major" required>
-            <option value="civil">Civil</option>
-            <option value="electrical">Electrical</option>
-            <option value="mechanical">Mechanical</option>
+            <option value="Civil">Civil</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Mechanical">Mechanical</option>
         </select>
 
         <label for="doc_name">Document Title:</label>
