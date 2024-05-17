@@ -9,19 +9,20 @@
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             padding: 8px;
             text-align: center;
             border-bottom: 1px solid;
             font-size: 20px;
         }
-        h1 {
-            text-align: left;
-        }
+
         .btn-add {
             float: right;
             cursor: pointer;
         }
+
         .search-container {
             text-align: right;
             margin-bottom: 20px;
@@ -34,29 +35,39 @@
             }
         }
 
-        function filterByMajor() {
+        function searchDocuments() {
             var major = document.getElementById('major').value;
+            var searchText = document.getElementById('searchText').value;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?major=' + major, true);
+            xhr.open('GET', 'search.php?major=' + major + '&searchText=' + searchText, true);
             xhr.send();
         }
     </script>
 </head>
+
 <body>
     <h1>List Documents</h1>
     <div class="search-container">
-        <label for="major">Filter by Major:</label>
-        <select name="major" id="major" onchange="filterByMajor()">
+        <label for="major">Filter by Discipline:</label>
+        <select name="major" id="major">
             <option value="">All</option>
             <option value="civil">Civil</option>
             <option value="electrical">Electrical</option>
-            <option value="mechanical">Mechanical</option>
+            <option value="mechanical">Machenical</option>
         </select>
+        <!-- <label for="fileType">Filter by Type:</label>
+        <select name="fileType" id="fileType">
+            <option value="">All</option>
+            <option value="doc">Docx</option>
+            <option value="pdf">PDF</option>
+            <option value="both">Both</option>
+        </select> -->
+        <input type="text" id="searchText" placeholder="Search" onkeyup="searchDocuments()">
     </div>
     <button class="btn-add" onclick="location.href='create_doc.php'">Create file</button>
     <br><br>
@@ -68,7 +79,7 @@
             <th>Document Title</th>
             <th>Date</th>
             <th>Prepared By</th>
-            <th>Revise</th>
+            <th>Revise DOC</th>
             <th>PDF</th>
             <th>Delete</th>
         </tr>
@@ -78,8 +89,8 @@
         $sql = "SELECT * FROM documents";
         $result = mysqli_query($conn, $sql);
 
-        if(mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
                 echo "<td>{$row['id']}</td>";
                 echo "<td>{$row['major']}</td>";
@@ -87,14 +98,40 @@
                 echo "<td>{$row['doc_name']}</td>";
                 echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
-                echo "<td><button onclick=\"window.open('revise.php?file={$row['doc_file']}')\">revise</button></td>";?>
-                <td><button onclick="window.open('saved_pdf_files/<?php echo $row['pdf_file'];?>', '_blank');">PDF</button></td>
-                <?php echo "<td><button onclick=\"confirmDelete({$row['id']})\">delete</button></td>";
+
+                if (!empty($row['doc_file'])) {
+                    echo "<td><button onclick=\"window.open('resive.php?file={$row['doc_file']}')\">Revise DOC</button></td>";
+                } else {
+                    echo "<td>-</td>";;
+                }
+
+                if (!empty($row['pdf_file'])) { ?>
+                    <td><button onclick="window.open('saved_pdf_files/<?php echo $row['pdf_file']; ?>', '_blank');">PDF</button></td>
+        <?php } else {
+                    echo "<td>-</td>";
+                }
+
+                echo "<td><button onclick='confirmDelete({$row['id']})'>Delete</button></td>";
                 echo "</tr>";
             }
         }
         ?>
     </table>
     <br><br>
+
+    <script>
+        document.getElementById('major').addEventListener('change', function() {
+            var major = this.value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.querySelector('table').innerHTML = this.responseText;
+                }
+            };
+            xhr.open('GET', 'search.php?major=' + major, true);
+            xhr.send();
+        });
+    </script>
 </body>
+
 </html>
