@@ -27,7 +27,7 @@ if(isset($_GET['major'])) {
             echo "<td>{$row['major']}</td>";
             echo "<td>{$row['doc_no']}</td>";
             echo "<td>{$row['doc_name']}</td>";
-            echo "<td>{$row['dateCreate']}</td>";
+            echo "<td>{$row['date']}</td>";
             echo "<td>{$row['owner']}</td>";
             echo "<td><button>edit</button>&nbsp;&nbsp;<button>delete</button></td>";
             echo "</tr>";

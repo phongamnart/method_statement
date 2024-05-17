@@ -1,6 +1,8 @@
 <?php
 include("connect.php");
 
+date_default_timezone_set('Asia/Bangkok');
+
 function generateDocNo($major, $conn) {
     $prefix = '';
     switch ($major) {
@@ -33,33 +35,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $major = $_POST['major'];
     $doc_no = generateDocNo($major, $conn);
     $doc_name = $_POST['doc_name'];
-    $dateCreate = date('Y-m-d H:i:s');
+    $date = date('Y-m-d H:i:s');
     $owner = $_POST['owner'];
 
-    $timestamp = date('YmdHis');
-    $random_number = rand(1000, 9999);
-    $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    $newname = $timestamp . '_' . $random_number . '.' . $extension;
-    $file_path = 'saved_files/' . $newname;
+    $doc_dir = 'saved_doc_files/';
+    $pdf_dir = 'saved_pdf_files/';
 
-    if (!is_dir('saved_files')) {
-        mkdir('saved_files', 0777, true);
+    if (!is_dir($doc_dir)) {
+        mkdir($doc_dir, 0777, true);
     }
 
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
-        $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, date, owner) 
-                VALUES ('$major', '$doc_no', '$doc_name' , '$newname', NOW(), '$owner')";
+    if (!is_dir($pdf_dir)) {
+        mkdir($pdf_dir, 0777, true);
+    }
 
-        echo $sql;
+    $doc_file_path = '';
+    if (isset($_FILES['doc_file']) && $_FILES['doc_file']['error'] == UPLOAD_ERR_OK) {
+        $timestamp = date('YmdHis');
+        $random_number = rand(1000, 9999);
+        $doc_extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
+        $doc_new_name = $timestamp . '_' . $random_number . '.' . $doc_extension;
+        $doc_file_path = $doc_dir . $doc_new_name;
 
-        if (mysqli_query($conn, $sql)) {
-            header("Location: list_doc.php");
+        if (!move_uploaded_file($_FILES['doc_file']['tmp_name'], $doc_file_path)) {
+            echo "Failed to upload DOC file.";
             exit();
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+    }
+
+    $pdf_file_path = '';
+    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] == UPLOAD_ERR_OK) {
+        $timestamp = date('YmdHis');
+        $random_number = rand(1000, 9999);
+        $pdf_extension = pathinfo($_FILES['pdf_file']['name'], PATHINFO_EXTENSION);
+        $pdf_new_name = $timestamp . '_' . $random_number . '.' . $pdf_extension;
+        $pdf_file_path = $pdf_dir . $pdf_new_name;
+
+        if (!move_uploaded_file($_FILES['pdf_file']['tmp_name'], $pdf_file_path)) {
+            echo "Failed to upload PDF file.";
+            exit();
+        }
+    }
+
+    $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, pdf_file, date, owner) 
+            VALUES ('$major', '$doc_no', '$doc_name', '$doc_new_name', '$pdf_new_name', '$date', '$owner')";
+
+    if (mysqli_query($conn, $sql)) {
+        header("Location: list_doc.php");
+        exit();
     } else {
-        echo "Failed to upload file.";
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 }
 ?>

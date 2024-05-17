@@ -29,9 +29,21 @@
     </style>
     <script>
         function confirmDelete(id) {
-            if (confirm("Are you sure you want to delete this employee?")) {
+            if (confirm("Are you sure you want to delete this document?")) {
                 location.href = 'delete.php?id=' + id;
             }
+        }
+
+        function filterByMajor() {
+            var major = document.getElementById('major').value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.querySelector('table').innerHTML = this.responseText;
+                }
+            };
+            xhr.open('GET', 'search.php?major=' + major, true);
+            xhr.send();
         }
     </script>
 </head>
@@ -39,7 +51,7 @@
     <h1>List Documents</h1>
     <div class="search-container">
         <label for="major">Filter by Major:</label>
-        <select name="major" id="major">
+        <select name="major" id="major" onchange="filterByMajor()">
             <option value="">All</option>
             <option value="civil">Civil</option>
             <option value="electrical">Electrical</option>
@@ -57,6 +69,8 @@
             <th>Date</th>
             <th>Prepared By</th>
             <th>Revise</th>
+            <th>PDF</th>
+            <th>Delete</th>
         </tr>
         <?php
         include("connect.php");
@@ -73,26 +87,14 @@
                 echo "<td>{$row['doc_name']}</td>";
                 echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
-                echo "<td><button onclick(window.open'download.php?file={$row['doc_file']}')>revise</button>&nbsp;&nbsp;<button onclick='confirmDelete({$row['id']})'>delete</button></td>";
+                echo "<td><button onclick=\"window.open('revise.php?file={$row['doc_file']}')\">revise</button></td>";?>
+                <td><button onclick="window.open('saved_pdf_files/<?php echo $row['pdf_file'];?>', '_blank');">PDF</button></td>
+                <?php echo "<td><button onclick=\"confirmDelete({$row['id']})\">delete</button></td>";
                 echo "</tr>";
             }
         }
         ?>
     </table>
     <br><br>
-
-    <script>
-        document.getElementById('major').addEventListener('change', function() {
-            var major = this.value;
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.querySelector('table').innerHTML = this.responseText;
-                }
-            };
-            xhr.open('GET', 'search.php?major=' + major, true);
-            xhr.send();
-        });
-    </script>
 </body>
 </html>
