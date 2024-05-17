@@ -20,6 +20,7 @@
         }
         .btn-add {
             float: right;
+            cursor: pointer;
         }
         .search-container {
             text-align: right;
@@ -38,7 +39,7 @@
             <option value="mechanical">Mechanical</option>
         </select>
     </div>
-    <button class="btn-add">Create file</button>
+    <button class="btn-add" onclick="location.href='create_doc.php'">Create file</button>
     <br><br>
     <table>
         <tr>
