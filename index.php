@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CKEditor 5 Example</title>
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 </head>
 <body>
     <form action="save.php" method="post">
@@ -13,7 +13,11 @@
     </form>
     <script>
         ClassicEditor
-            .create(document.querySelector('#editor'))
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: 'upload.php?command=QuickUpload&type=Files&responseType=json'
+                }
+            })
             .catch(error => {
                 console.error(error);
             });
