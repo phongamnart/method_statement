@@ -2,32 +2,35 @@
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpWord\PhpWord;
-// use PhpOffice\PhpWord\IOFactory;
+
+include("connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $content = $_POST['editor_content'];
+    $sql = "SELECT * FROM uploaded_files ORDER BY id DESC LIMIT 1";
+    $result = $conn->query($sql);
 
-    // $uploadDirectory = 'uploads/';
-    $imagePath = 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'; 
-    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $imagePath = $row["url"];
+    } else {
+        echo "No image found in database.";
+        exit;
+    }
+
+    $content = $_POST['editor_content'];
 
     $phpWord = new PhpWord();
     $section = $phpWord->addSection();
-    $section->addHeader()->addImage($imagePath);
+    $section->addImage($imagePath);
 
-    // $section->addText(htmlspecialchars($content));
-    // $section->addText(htmlspecialchars_decode(strip_tags($content)));
+    $section->addText(htmlspecialchars_decode(strip_tags($content)));
 
-    \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, false, false);
-
-    // $section->addText($content);
-    $filename = 'test_save/test.docx';
-    // $filename = "test_save/" . date("Ymd_His") . ".docx";
-    // $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+    $currentTime = date("Y-m-d_H-i-s");
+    $randomNumber = uniqid();
+    $filename = 'test_save/' . $currentTime . '_' . $randomNumber . '.docx';
     $phpWord->save($filename);
 
     echo "File saved successfully as " . basename($filename);
 } else {
     echo "Invalid request method.";
 }
-?>
