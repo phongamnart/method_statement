@@ -47,10 +47,13 @@
             xhr.open('GET', 'search.php?major=' + major + '&searchText=' + searchText, true);
             xhr.send();
         }
+
     </script>
 </head>
 
 <body>
+    <button onclick="history.back()">Back</button>
+    <button class="btn-home" onclick="location.href='index.php';">Home</button>
     <h1>List Documents</h1>
     <div class="search-container">
         <label for="major">Filter by Discipline:</label>
@@ -69,7 +72,7 @@
         </select> -->
         <input type="text" id="searchText" placeholder="Search" onkeyup="searchDocuments()">
     </div>
-    <button class="btn-add" onclick="location.href='create_doc.php'">Create file</button>
+    <button class="btn-add" onclick="location.href='create_doc.php'">Create document</button>
     <br><br>
     <table>
         <tr>
@@ -102,7 +105,7 @@
                 if (!empty($row['doc_file'])) {
                     echo "<td><button onclick=\"window.open('resive.php?file={$row['doc_file']}')\">Revise DOC</button></td>";
                 } else {
-                    echo "<td>-</td>";;
+                    echo "<td><button onclick=\"location.href='edit_doc.php'\">Revise DOC</button></td>";;
                 }
 
                 if (!empty($row['pdf_file'])) { ?>
