@@ -1,31 +1,41 @@
 <?php
-require 'vendor/autoload.php';
+require 'vendor/autoload.php'; //import
 
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Shared\Html; 
 
-include("connect.php");
+include("connect.php"); //connect DB
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $sql = "SELECT * FROM uploaded_files ORDER BY id DESC LIMIT 1";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $imagePath = $row["url"];
-    } else {
-        echo "No image found in database.";
-        exit;
-    }
-
-    $content = $_POST['editor_content'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
+    $content = $_POST['editor_content']; //content ที่ส่งมาจากหน้า index
 
     $phpWord = new PhpWord();
     $section = $phpWord->addSection();
-    $section->addImage($imagePath);
 
-    $section->addText(htmlspecialchars_decode(strip_tags($content)));
+    $doc = new DOMDocument(); //create obj
+    libxml_use_internal_errors(true); //manage error
+    $doc->loadHTML('<html><body>' . $content . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD); //load html
+    libxml_clear_errors(); //clear error
 
-    $currentTime = date("Y-m-d_H-i-s");
+    $body = $doc->getElementsByTagName('body')->item(0); //ดึง <body>
+
+    if ($body) { // check <body>
+        foreach ($body->childNodes as $childNode) {
+            if ($childNode->nodeName == 'figure' && $childNode->getElementsByTagName('img')->length > 0) { //หา <figure> และ <img>
+                $imgNode = $childNode->getElementsByTagName('img')->item(0); //ดึง <img>
+                $imgSrc = $imgNode->getAttribute('src'); //ดึงรูปใน <src>
+                $section->addImage($imgSrc); //add image ที่ได้จาก <src>
+            } else { //ถ้าไม่มี <figure> และ <img>
+                $htmlContent = $doc->saveHTML($childNode); //เก็บไว้ในตัวแปล $htmlContent
+                Html::addHtml($section, $htmlContent, false, false); //convert html to text
+            }
+        }
+    } else {
+        echo "Failed to parse HTML content.";
+        exit;
+    }
+
+    $currentTime = date("YmdHis");
     $randomNumber = uniqid();
     $filename = 'test_save/' . $currentTime . '_' . $randomNumber . '.docx';
     $phpWord->save($filename);
@@ -34,3 +44,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo "Invalid request method.";
 }
+?>
