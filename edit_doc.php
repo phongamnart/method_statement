@@ -12,7 +12,11 @@
     <button class="btn-home" onclick="location.href='index.php';">Home</button>
     <br><br>
     
+    <?php
+    $id = $_GET['id'];
+    ?>
     <form action="save_doc.php" method="post">
+    <input type="hidden" name="id" value="<?php echo $id; ?>">
         <textarea name="editor_content" id="editor"></textarea>
         <br>
         <input type="submit" value="Save as Word">

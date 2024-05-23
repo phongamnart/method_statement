@@ -82,7 +82,8 @@
             <th>Document Title</th>
             <th>Date</th>
             <th>Prepared By</th>
-            <th>Revise DOC</th>
+            <th>Edit .docx</th>
+            <th>Download .docx</th>
             <th>PDF</th>
             <th>Delete</th>
         </tr>
@@ -102,10 +103,16 @@
                 echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
 
-                if (!empty($row['doc_file'])) {
-                    echo "<td><button onclick=\"window.open('resive.php?file={$row['doc_file']}')\">Revise DOC</button></td>";
+                if (!empty($row['doc_file'])) { //edit docx
+                    echo "<td><button onclick=\"window.open('edit_doc.php?file={$row['doc_file']}')\">Edit .docx</button></td>";
                 } else {
-                    echo "<td><button onclick=\"location.href='edit_doc.php'\">Revise DOC</button></td>";;
+                    echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
+                }
+
+                if (!empty($row['doc_file'])) { //download docx
+                    echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\">Download .docx</button></td>";
+                } else {
+                    echo "<td>-</td>";
                 }
 
                 if (!empty($row['pdf_file'])) { ?>
