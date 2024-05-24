@@ -13,42 +13,22 @@
     <br><br>
 
     <?php
-    $id = $_GET['id'];
-
     include("connect.php");
+    $conDB = new db_conn();
 
-    $sql = "SELECT html_file FROM documents WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->bind_result($filePath);
-    $stmt->fetch();
-    $stmt->close();
-    $conn->close();
+    $id = isset($_GET['id']) ? $_GET['id'] : '';
+    echo $strSQLl =  "SELECT * FROM `documents` WHERE md5(`id`) = '$id' LIMIT 1";
+    $objQuery = $conDB->sqlQuery($strSQLl);
 
-    // echo "<p>File Path: " . htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8') . "</p>"; //debug
-
-    if ($filePath && file_exists($filePath)) {
-        require 'vendor/autoload.php';
-
-        $phpWord = \PhpOffice\PhpWord\IOFactory::load($filePath);
-
-        $fullText = '';
-        foreach ($phpWord->getSections() as $section) {
-            foreach ($section->getElements() as $element) {
-                if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                    $fullText .= $element->getText();
-                }
-            }
-        }
-    } else {
-        $fullText = '';
+    while($objResult = mysqli_fetch_assoc($objQuery)) { 
+        $html_file = $objResult['html_file'];
     }
+
     ?>
 
     <form action="save_doc.php" method="post">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
-        <textarea name="editor_content" id="editor"><?php echo $fullText; ?></textarea>
+        <textarea name="editor_content" id="editor"><?php echo $html_file; ?></textarea>
         <br>
         <input type="submit" value="Save as Word">
     </form>
