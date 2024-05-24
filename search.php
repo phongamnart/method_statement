@@ -1,5 +1,7 @@
 <?php
 include("connect.php");
+$conDB = new db_conn();
+
 //isset($_GET['major']) || isset($_GET['searchText']) || 
 if(isset($_GET['major']) || isset($_GET['searchText'])) {
     $major = isset($_GET['major']) ? $_GET['major'] : '';
@@ -24,7 +26,7 @@ if(isset($_GET['major']) || isset($_GET['searchText'])) {
     //     }
     // }
 
-    $result = mysqli_query($conn, $sql);
+    $result = $conDB->sqlQuery($sql);
 
     if(mysqli_num_rows($result) > 0) {
         echo "<tr>";
@@ -34,7 +36,8 @@ if(isset($_GET['major']) || isset($_GET['searchText'])) {
         echo "<th>Document Title</th>";
         echo "<th>Date</th>";
         echo "<th>Prepared By</th>";
-        echo "<th>Revise DOC</th>";
+        echo "<th>Edit DOC</th>";
+        echo "<th>Download .docx</th>";
         echo "<th>PDF</th>";
         echo "<th>Delete</th>";
         echo "</tr>";
@@ -47,15 +50,17 @@ if(isset($_GET['major']) || isset($_GET['searchText'])) {
             echo "<td>{$row['doc_name']}</td>";
             echo "<td>{$row['date']}</td>";
             echo "<td>{$row['owner']}</td>";
-            if (!empty($row['doc_file'])) {
-                echo "<td><button onclick=\"window.open('resive.php?file={$row['doc_file']}')\">Revise DOC</button></td>";
+            echo "<td><button onclick=\"location.href='edit_doc.php?id=".md5($row['id'])."'\">Edit .docx</button></td>";
+
+            if (!empty($row['doc_file'])) { //download docx
+                echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\">Download .docx</button></td>";
             } else {
                 echo "<td>-</td>";
             }
 
-            if (!empty($row['pdf_file'])) {
-                echo "<td><button onclick=\"window.open('saved_pdf_files/{$row['pdf_file']}', '_blank');\">PDF</button></td>";
-            } else {
+            if (!empty($row['pdf_file'])) { ?>
+                <td><button onclick="window.open('saved_pdf_files/<?php echo $row['pdf_file']; ?>', '_blank');">PDF</button></td>
+    <?php } else {
                 echo "<td>-</td>";
             }
 

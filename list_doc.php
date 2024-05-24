@@ -89,9 +89,10 @@
         </tr>
         <?php
         include("connect.php");
+        $conDB = new db_conn();
 
         $sql = "SELECT * FROM documents";
-        $result = mysqli_query($conn, $sql);
+        $result = $conDB->sqlQuery($sql);
 
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
@@ -103,11 +104,11 @@
                 echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
 
-                if (!empty($row['doc_file'])) { //edit docx
-                    echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
-                } else {
-                    echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
-                }
+                // if (!empty($row['doc_file'])) { //edit docx
+                echo "<td><button onclick=\"location.href='edit_doc.php?id=".md5($row['id'])."'\">Edit .docx</button></td>";
+                // } else {
+                    // echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
+                // }
 
                 if (!empty($row['doc_file'])) { //download docx
                     echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\">Download .docx</button></td>";

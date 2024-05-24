@@ -5,6 +5,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Html;
 
 include("connect.php"); //connect DB
+$conDB = new db_conn();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
 
@@ -15,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
 
     $content = $_POST['editor_content'];
     $id = $_POST['id'];
+    
 
     $phpWord = new PhpWord();
     $section1 = $phpWord->addSection();
@@ -51,21 +53,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $section2 = $phpHtml->addSection();
     $section2->addText(htmlspecialchars($content));
 
+    // $html_content = htmlspecialchars($content);
+
     $html_file = 'saved_html_files/' . $currentTime . '_' . $randomNum . '_html.docx';
     $phpHtml->save($html_file); //html file
 
-    $query = "update documents set doc_file = ?, html_file = ? where id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('ssi', $doc_file, $html_file, $id);
 
-    if ($stmt->execute()) {
 
-        $stmt->close();
-        $conn->close();
-        echo "<script>alert('Files saved successfully as " . basename($doc_file) . " and " . basename($html_file) . "'); window.location.href = 'list_doc.php';</script>";
-    } else {
-        echo "<script>alert('Failed to save file information to the database.); window.location.href = 'list_doc.php';</script>";
-    }
+    $query = "update `documents` set `doc_file` = '$doc_file', `html_file` = '$html_file' where `id` = '$id'";
+    $conDB->sqlQuery($query);
+
+    // echo "<script>alert('Files saved successfully as " . basename($doc_file) . " and " . basename($html_file) . "'); window.location.href = 'list_doc.php';</script>";
+    echo "$query";
+    // echo "$id";
+
 } else {
     echo "Invalid request method.";
 }

@@ -1,9 +1,8 @@
 <?php
 include("connect.php");
-
-date_default_timezone_set('Asia/Bangkok');
-
-function generateDocNo($major, $conn) {
+$conDB = new db_conn();
+function generateDocNo($major, $conDB)
+{
     $prefix = '';
     switch ($major) {
         case 'Civil':
@@ -17,8 +16,8 @@ function generateDocNo($major, $conn) {
             break;
     }
 
-    $sql = "SELECT doc_no FROM documents WHERE major='$major' ORDER BY id DESC LIMIT 1";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT `doc_no` FROM `documents` WHERE `major`='$major' ORDER BY id DESC LIMIT 1";
+    $result = $conDB->sqlQuery($sql);
     $latest_doc_no = mysqli_fetch_assoc($result);
 
     if ($latest_doc_no) {
@@ -33,7 +32,7 @@ function generateDocNo($major, $conn) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $major = $_POST['major'];
-    $doc_no = generateDocNo($major, $conn);
+    $doc_no = generateDocNo($major, $conDB);
     $doc_name = $_POST['doc_name'];
     $date = date('Y-m-d H:i:s');
     $owner = $_POST['owner'];
@@ -54,57 +53,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mkdir($pdf_dir, 0777, true);
     }
 
-    // $doc_file_path = '';
-    // if (isset($_FILES['doc_file']) && $_FILES['doc_file']['error'] == UPLOAD_ERR_OK) {
-    //     $timestamp = date('YmdHis');
-    //     $random_number = uniqid();
-    //     $doc_extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
-    //     $doc_new_name = $timestamp . '_' . $random_number . '.' . $doc_extension;
-    //     $doc_file_path = $doc_dir . $doc_new_name . '_document.docx';
-
-    //     if (!move_uploaded_file($_FILES['doc_file']['tmp_name'], $doc_file_path)) {
-    //         echo "Failed to upload DOC file.";
-    //         exit();
-    //     }
-    // }
-
-    // $html_file_path = '';
-    // if (isset($_FILES['html_file']) && $_FILES['html_file']['error'] == UPLOAD_ERR_OK) {
-    //     $timestamp = date('YmdHis');
-    //     $random_number = uniqid();
-    //     $html_extension = pathinfo($_FILES['html_file']['name'], PATHINFO_EXTENSION);
-    //     $html_new_name = $timestamp . '_' . $random_number . '.' . $html_extension;
-    //     $html_file_path = $html_dir . $html_new_name . '_html.docx';
-
-    //     if (!move_uploaded_file($_FILES['html_file']['tmp_name'], $html_file_path)) {
-    //         echo "Failed to upload HTML file.";
-    //         exit();
-    //     }
-    // }
-
-    // $pdf_file_path = '';
-    // if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] == UPLOAD_ERR_OK) {
-    //     $timestamp = date('YmdHis');
-    //     $random_number = uniqid();
-    //     $pdf_extension = pathinfo($_FILES['pdf_file']['name'], PATHINFO_EXTENSION);
-    //     $pdf_new_name = $timestamp . '_' . $random_number . '.' . $pdf_extension;
-    //     $pdf_file_path = $pdf_dir . $pdf_new_name;
-
-    //     if (!move_uploaded_file($_FILES['pdf_file']['tmp_name'], $pdf_file_path)) {
-    //         echo "Failed to upload PDF file.";
-    //         exit();
-    //     }
-    // }
-
-    $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, html_file, pdf_file, date, owner) 
+    $sql = "INSERT INTO `documents` (`major`, `doc_no`, `doc_name`, `doc_file`, `html_file`, `pdf_file`, `date`, `owner`) 
             VALUES ('$major', '$doc_no', '$doc_name', '$doc_file_path', '$html_file_path', '$pdf_file_path', '$date', '$owner')";
 
-    if (mysqli_query($conn, $sql)) {
-        $last_id = mysqli_insert_id($conn);
-        header("Location: edit_doc.php?id=$last_id");
-        exit();
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    $conDB->sqlQuery($sql);
+
+    $strSQL3 = "SELECT * FROM `documents` WHERE `date` = '$date' LIMIT 1";
+    $objQuery = $conDB->sqlQuery($strSQL3);
+    while ($objResult = mysqli_fetch_assoc($objQuery)) {
+        $no = $objResult['id'];
     }
+    header("Location: edit_doc.php?id=".md5($no)."");
+    exit();
 }
-?>
