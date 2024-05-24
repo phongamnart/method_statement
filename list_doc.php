@@ -104,7 +104,7 @@
                 echo "<td>{$row['owner']}</td>";
 
                 if (!empty($row['doc_file'])) { //edit docx
-                    echo "<td><button onclick=\"window.open('edit_doc.php?file={$row['doc_file']}')\">Edit .docx</button></td>";
+                    echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
                 } else {
                     echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
                 }

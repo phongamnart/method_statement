@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date = date('Y-m-d H:i:s');
     $owner = $_POST['owner'];
 
-    $doc_dir = 'saved_doc_files/';
+    $doc_dir = 'saved_docx_files/';
     $pdf_dir = 'saved_pdf_files/';
 
     if (!is_dir($doc_dir)) {
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $doc_file_path = '';
     if (isset($_FILES['doc_file']) && $_FILES['doc_file']['error'] == UPLOAD_ERR_OK) {
         $timestamp = date('YmdHis');
-        $random_number = rand(1000, 9999);
+        $random_number = uniqid();
         $doc_extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
         $doc_new_name = $timestamp . '_' . $random_number . '.' . $doc_extension;
         $doc_file_path = $doc_dir . $doc_new_name;
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdf_file_path = '';
     if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] == UPLOAD_ERR_OK) {
         $timestamp = date('YmdHis');
-        $random_number = rand(1000, 9999);
+        $random_number = uniqid();
         $pdf_extension = pathinfo($_FILES['pdf_file']['name'], PATHINFO_EXTENSION);
         $pdf_new_name = $timestamp . '_' . $random_number . '.' . $pdf_extension;
         $pdf_file_path = $pdf_dir . $pdf_new_name;

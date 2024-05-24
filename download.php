@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET['file'])) { //check param
     $file = basename($_GET['file']); //ดึงชื่อไฟล์ที่ param ส่งมา
-    $filePath = __DIR__ . '/test_save/' . $file; //path
+    $filePath = __DIR__ . '/saved_docx_files/' . $file; //path
 
     echo "Trying to download: " . $filePath . "<br>"; //debug
 

@@ -13,11 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
         exit;
     }
 
-    $content = $_POST['editor_content']; //content ที่ส่งมาจากหน้า index
+    $content = $_POST['editor_content'];
     $id = $_POST['id'];
 
     $phpWord = new PhpWord();
-    $section = $phpWord->addSection();
+    $section1 = $phpWord->addSection();
 
     $doc = new DOMDocument(); //create obj
     libxml_use_internal_errors(true); //manage error
@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
             if ($childNode->nodeName == 'figure' && $childNode->getElementsByTagName('img')->length > 0) { //หา <figure> และ <img>
                 $imgNode = $childNode->getElementsByTagName('img')->item(0); //ดึง <img>
                 $imgSrc = $imgNode->getAttribute('src'); //ดึงรูปใน <src>
-                $section->addImage($imgSrc); //add image ที่ได้จาก <src>
+                $section1->addImage($imgSrc); //add image ที่ได้จาก <src>
             } else { //ถ้าไม่มี <figure> และ <img>
                 $htmlContent = $doc->saveHTML($childNode); //เก็บไว้ในตัวแปล $htmlContent
-                Html::addHtml($section, $htmlContent, false, false); //convert html to text
+                Html::addHtml($section1, $htmlContent, false, false); //convert html to text
             }
         }
     } else {
@@ -43,16 +43,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     }
 
     $currentTime = date("YmdHis");
-    $randomNumber = uniqid();
-    $filename = 'test_save/' . $currentTime . '_' . $randomNumber . '.docx';
-    $phpWord->save($filename);
+    $randomNum = uniqid();
+    $doc_file = 'saved_docx_files/' . $currentTime . '_' . $randomNum . '_docucment.docx';
+    $phpWord->save($doc_file); //docx file
+ 
+    $phpHtml = new PhpWord();
+    $section2 = $phpHtml->addSection();
+    $section2->addText(htmlspecialchars($content));
 
-    $query = "update documents set doc_file = ? where id = ?";
+    $html_file = 'saved_html_files/' . $currentTime. '_' . $randomNum .'_html.docx';
+    $phpHtml->save($html_file); //html file
+
+    $query = "update documents set doc_file = ?, html_file = ? where id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('si', $filename, $id);
+    $stmt->bind_param('ssi', $doc_file, $html_file, $id);
 
     if ($stmt->execute()) {
-        echo "File saved successfully as " . basename($filename);
+        echo "File saved successfully as " . basename($doc_file) . " and " . basename($html_file);
     } else {
         echo "Failed to save file information to the database.";
     }
