@@ -36,11 +36,11 @@
         <label for="owner">Prepared By:</label>
         <input type="text" name="owner" id="owner" required>
 
-        <label for="file">Upload DOC File:</label>
+        <!-- <label for="file">Upload DOC File:</label>
         <input type="file" name="doc_file" id="doc_file" accept=".doc,.docx">
 
         <label for="pdf_file">Upload PDF File:</label>
-        <input type="file" name="pdf_file" id="pdf_file" accept=".pdf">
+        <input type="file" name="pdf_file" id="pdf_file" accept=".pdf"> -->
 
         <input type="submit" value="Create Document">
     </form>

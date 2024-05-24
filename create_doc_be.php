@@ -39,49 +39,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $owner = $_POST['owner'];
 
     $doc_dir = 'saved_docx_files/';
+    $html_dir = 'saved_html_files/';
     $pdf_dir = 'saved_pdf_files/';
 
     if (!is_dir($doc_dir)) {
         mkdir($doc_dir, 0777, true);
     }
 
+    if (!is_dir($html_dir)) {
+        mkdir($html_dir, 0777, true);
+    }
+
     if (!is_dir($pdf_dir)) {
         mkdir($pdf_dir, 0777, true);
     }
 
-    $doc_file_path = '';
-    if (isset($_FILES['doc_file']) && $_FILES['doc_file']['error'] == UPLOAD_ERR_OK) {
-        $timestamp = date('YmdHis');
-        $random_number = uniqid();
-        $doc_extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
-        $doc_new_name = $timestamp . '_' . $random_number . '.' . $doc_extension;
-        $doc_file_path = $doc_dir . $doc_new_name;
+    // $doc_file_path = '';
+    // if (isset($_FILES['doc_file']) && $_FILES['doc_file']['error'] == UPLOAD_ERR_OK) {
+    //     $timestamp = date('YmdHis');
+    //     $random_number = uniqid();
+    //     $doc_extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
+    //     $doc_new_name = $timestamp . '_' . $random_number . '.' . $doc_extension;
+    //     $doc_file_path = $doc_dir . $doc_new_name . '_document.docx';
 
-        if (!move_uploaded_file($_FILES['doc_file']['tmp_name'], $doc_file_path)) {
-            echo "Failed to upload DOC file.";
-            exit();
-        }
-    }
+    //     if (!move_uploaded_file($_FILES['doc_file']['tmp_name'], $doc_file_path)) {
+    //         echo "Failed to upload DOC file.";
+    //         exit();
+    //     }
+    // }
 
-    $pdf_file_path = '';
-    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] == UPLOAD_ERR_OK) {
-        $timestamp = date('YmdHis');
-        $random_number = uniqid();
-        $pdf_extension = pathinfo($_FILES['pdf_file']['name'], PATHINFO_EXTENSION);
-        $pdf_new_name = $timestamp . '_' . $random_number . '.' . $pdf_extension;
-        $pdf_file_path = $pdf_dir . $pdf_new_name;
+    // $html_file_path = '';
+    // if (isset($_FILES['html_file']) && $_FILES['html_file']['error'] == UPLOAD_ERR_OK) {
+    //     $timestamp = date('YmdHis');
+    //     $random_number = uniqid();
+    //     $html_extension = pathinfo($_FILES['html_file']['name'], PATHINFO_EXTENSION);
+    //     $html_new_name = $timestamp . '_' . $random_number . '.' . $html_extension;
+    //     $html_file_path = $html_dir . $html_new_name . '_html.docx';
 
-        if (!move_uploaded_file($_FILES['pdf_file']['tmp_name'], $pdf_file_path)) {
-            echo "Failed to upload PDF file.";
-            exit();
-        }
-    }
+    //     if (!move_uploaded_file($_FILES['html_file']['tmp_name'], $html_file_path)) {
+    //         echo "Failed to upload HTML file.";
+    //         exit();
+    //     }
+    // }
 
-    $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, pdf_file, date, owner) 
-            VALUES ('$major', '$doc_no', '$doc_name', '$doc_new_name', '$pdf_new_name', '$date', '$owner')";
+    // $pdf_file_path = '';
+    // if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] == UPLOAD_ERR_OK) {
+    //     $timestamp = date('YmdHis');
+    //     $random_number = uniqid();
+    //     $pdf_extension = pathinfo($_FILES['pdf_file']['name'], PATHINFO_EXTENSION);
+    //     $pdf_new_name = $timestamp . '_' . $random_number . '.' . $pdf_extension;
+    //     $pdf_file_path = $pdf_dir . $pdf_new_name;
+
+    //     if (!move_uploaded_file($_FILES['pdf_file']['tmp_name'], $pdf_file_path)) {
+    //         echo "Failed to upload PDF file.";
+    //         exit();
+    //     }
+    // }
+
+    $sql = "INSERT INTO documents (major, doc_no, doc_name, doc_file, html_file, pdf_file, date, owner) 
+            VALUES ('$major', '$doc_no', '$doc_name', '$doc_file_path', '$html_file_path', '$pdf_file_path', '$date', '$owner')";
 
     if (mysqli_query($conn, $sql)) {
-        header("Location: list_doc.php");
+        $last_id = mysqli_insert_id($conn);
+        header("Location: edit_doc.php?id=$last_id");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);

@@ -2,7 +2,7 @@
 require 'vendor/autoload.php'; //import
 
 use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Shared\Html; 
+use PhpOffice\PhpWord\Shared\Html;
 
 include("connect.php"); //connect DB
 
@@ -46,12 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $randomNum = uniqid();
     $doc_file = 'saved_docx_files/' . $currentTime . '_' . $randomNum . '_docucment.docx';
     $phpWord->save($doc_file); //docx file
- 
+
     $phpHtml = new PhpWord();
     $section2 = $phpHtml->addSection();
     $section2->addText(htmlspecialchars($content));
 
-    $html_file = 'saved_html_files/' . $currentTime. '_' . $randomNum .'_html.docx';
+    $html_file = 'saved_html_files/' . $currentTime . '_' . $randomNum . '_html.docx';
     $phpHtml->save($html_file); //html file
 
     $query = "update documents set doc_file = ?, html_file = ? where id = ?";
@@ -59,15 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $stmt->bind_param('ssi', $doc_file, $html_file, $id);
 
     if ($stmt->execute()) {
-        echo "File saved successfully as " . basename($doc_file) . " and " . basename($html_file);
-    } else {
-        echo "Failed to save file information to the database.";
-    }
 
-    $stmt->close();
-    $conn->close();
-    
+        $stmt->close();
+        $conn->close();
+        echo "<script>alert('Files saved successfully as " . basename($doc_file) . " and " . basename($html_file) . "'); window.location.href = 'list_doc.php';</script>";
+    } else {
+        echo "<script>alert('Failed to save file information to the database.); window.location.href = 'list_doc.php';</script>";
+    }
 } else {
     echo "Invalid request method.";
 }
-?>
