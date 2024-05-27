@@ -104,11 +104,9 @@
                 echo "<td>{$row['date']}</td>";
                 echo "<td>{$row['owner']}</td>";
 
-                // if (!empty($row['doc_file'])) { //edit docx
                 echo "<td><button onclick=\"location.href='edit_doc.php?id=".md5($row['id'])."'\">Edit .docx</button></td>";
-                // } else {
-                    // echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
-                // }
+
+                // echo "<td><button onclick=\"location.href='edit_doc.php?id={$row['id']}'\">Edit .docx</button></td>";
 
                 if (!empty($row['doc_file'])) { //download docx
                     echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\">Download .docx</button></td>";

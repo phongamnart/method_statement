@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +10,21 @@
             width: 50%;
             margin: 0 auto;
         }
+
         label {
             display: block;
             margin: 10px 0 5px;
         }
-        input, select {
+
+        input,
+        select {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
     <h1>Create Document</h1>
     <form action="create_doc_be.php" method="post" enctype="multipart/form-data">
@@ -45,4 +50,5 @@
         <input type="submit" value="Create Document">
     </form>
 </body>
+
 </html>

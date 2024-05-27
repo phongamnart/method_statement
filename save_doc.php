@@ -7,6 +7,7 @@ use PhpOffice\PhpWord\Shared\Html;
 include("connect.php"); //connect DB
 $conDB = new db_conn();
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
 
     if (!isset($_POST['id'])) {
@@ -16,8 +17,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
 
     $content = $_POST['editor_content'];
     $id = $_POST['id'];
-    
 
+    $docNoSQL = "SELECT `doc_no` FROM `documents` WHERE md5(`id`) = '$id' LIMIT 1";
+    $result = $conDB->sqlQuery($docNoSQL);
+    $docNo = mysqli_fetch_assoc($result);
+
+    if (!$docNo) {
+        echo "Document not found";
+        exit;
+    }
+
+    $doc_no = $docNo['doc_no'];
+    
     $phpWord = new PhpWord();
     $section1 = $phpWord->addSection();
 
@@ -44,27 +55,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
         exit;
     }
 
+    $uploadDir = 'uploads/';
+    $idDir = $uploadDir . $doc_no . '/';
+
+    if (!is_dir($idDir)) {
+        mkdir($idDir, 0777, true);
+    }
+
     $currentTime = date("YmdHis");
     $randomNum = uniqid();
-    $doc_file = 'saved_docx_files/' . $currentTime . '_' . $randomNum . '_docucment.docx';
+    $doc_file = $idDir . '/' . $doc_no . '.docx';
     $phpWord->save($doc_file); //docx file
 
-    $phpHtml = new PhpWord();
-    $section2 = $phpHtml->addSection();
-    $section2->addText(htmlspecialchars($content));
+    $tag_html = htmlspecialchars($content, ENT_QUOTES,'UTF-8');
 
-    // $html_content = htmlspecialchars($content);
-
-    $html_file = 'saved_html_files/' . $currentTime . '_' . $randomNum . '_html.docx';
-    $phpHtml->save($html_file); //html file
-
-
-
-    $query = "update `documents` set `doc_file` = '$doc_file', `html_file` = '$html_file' where `id` = '$id'";
+    echo $query = "UPDATE `documents` SET `doc_file` = '$doc_file', `tag_html` = '$tag_html' WHERE md5(`id`) = '$id'";
     $conDB->sqlQuery($query);
 
-    // echo "<script>alert('Files saved successfully as " . basename($doc_file) . " and " . basename($html_file) . "'); window.location.href = 'list_doc.php';</script>";
-    echo "$query";
+    echo "<script>alert('Files saved successfully as " . basename($doc_file)  . "'); window.location.href = 'list_doc.php';</script>";
     // echo "$id";
 
 } else {

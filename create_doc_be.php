@@ -37,32 +37,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date = date('Y-m-d H:i:s');
     $owner = $_POST['owner'];
 
-    $doc_dir = 'saved_docx_files/';
-    $html_dir = 'saved_html_files/';
-    $pdf_dir = 'saved_pdf_files/';
-
-    if (!is_dir($doc_dir)) {
-        mkdir($doc_dir, 0777, true);
-    }
-
-    if (!is_dir($html_dir)) {
-        mkdir($html_dir, 0777, true);
-    }
-
-    if (!is_dir($pdf_dir)) {
-        mkdir($pdf_dir, 0777, true);
-    }
-
-    $sql = "INSERT INTO `documents` (`major`, `doc_no`, `doc_name`, `doc_file`, `html_file`, `pdf_file`, `date`, `owner`) 
-            VALUES ('$major', '$doc_no', '$doc_name', '$doc_file_path', '$html_file_path', '$pdf_file_path', '$date', '$owner')";
+    echo $sql = "INSERT INTO `documents` (`major`, `doc_no`, `doc_name`, `date`, `owner`)
+            VALUES ('$major', '$doc_no', '$doc_name', '$date', '$owner')";
 
     $conDB->sqlQuery($sql);
 
-    $strSQL3 = "SELECT * FROM `documents` WHERE `date` = '$date' LIMIT 1";
-    $objQuery = $conDB->sqlQuery($strSQL3);
+    $strSQL = "SELECT * FROM `documents` WHERE `date` = '$date' LIMIT 1";
+    $objQuery = $conDB->sqlQuery($strSQL);
     while ($objResult = mysqli_fetch_assoc($objQuery)) {
-        $no = $objResult['id'];
+        $id = $objResult['id'];
     }
-    header("Location: edit_doc.php?id=".md5($no)."");
+    header("Location: edit_doc.php?id=".md5($id)."");
     exit();
 }

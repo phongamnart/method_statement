@@ -17,32 +17,34 @@
     $conDB = new db_conn();
 
     $id = isset($_GET['id']) ? $_GET['id'] : '';
-    echo $strSQLl =  "SELECT * FROM `documents` WHERE md5(`id`) = '$id' LIMIT 1";
+    $strSQLl =  "SELECT * FROM `documents` WHERE md5(`id`) = '$id' LIMIT 1";
     $objQuery = $conDB->sqlQuery($strSQLl);
 
     while($objResult = mysqli_fetch_assoc($objQuery)) { 
-        $html_file = $objResult['html_file'];
+        $tag_html = $objResult['tag_html'];
     }
 
     ?>
 
     <form action="save_doc.php" method="post">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
-        <textarea name="editor_content" id="editor"><?php echo $html_file; ?></textarea>
+        <textarea name="editor_content" id="editor"><?php echo $tag_html; ?></textarea>
         <br>
         <input type="submit" value="Save as Word">
     </form>
     <script>
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                ckfinder: {
-                    uploadUrl: 'upload_img.php?command=QuickUpload&type=Files&responseType=json'
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
+    var documentId = "<?php echo $id; ?>";
+
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            ckfinder: {
+                uploadUrl: "upload_img.php?id=" + documentId + "&command=QuickUpload&type=Files&responseType=json"
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 </body>
 
 </html>
