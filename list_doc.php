@@ -96,7 +96,7 @@
                             echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn btn-primary'>Edit .docx</button></td>";
 
                             if (!empty($row['doc_file'])) {
-                                echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\" class='btn btn-secondary'>Download .docx</button></td>";
+                                echo "<td><button onclick=\"window.location.href='download.php?id=" . md5($row['id']) . "'\" class='btn btn-secondary'>Download .docx</button></td>";
                             } else {
                                 echo "<td>-</td>";
                             }
