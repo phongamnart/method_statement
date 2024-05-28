@@ -11,17 +11,6 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
         $row = $result_select_files->fetch_assoc();
         $doc_file_name = $row['doc_file'];
         $pdf_file_name = $row['pdf_file'];
-        
-        $doc_file_path = "saved_docx_files/" . $doc_file_name;
-        $pdf_file_path = "saved_pdf_files/" . $pdf_file_name;
-
-        if(file_exists($doc_file_path)) {
-            unlink($doc_file_path);
-        }
-
-        if(file_exists($pdf_file_path)) {
-            unlink($pdf_file_path);
-        }
     }
     
     $sql_delete = "DELETE FROM `documents` WHERE `id` = '$id'";
