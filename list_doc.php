@@ -49,6 +49,12 @@
             <div class="col-md-6">
                 <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
             </div>
+            <div class="col">
+                <input type="datetime-local" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
+            </div>
+            <div class="col">
+                <input type="datetime-local" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
+            </div>
         </div>
 
         <button class="btn btn-success mb-3" onclick="location.href='create_doc.php'">Create document</button>
@@ -147,13 +153,15 @@
         function searchDocuments() { //search
             var major = document.getElementById('major').value;
             var searchText = document.getElementById('searchText').value;
+            var start_date = document.getElementById('start_date').value;
+            var end_date = document.getElementById('end_date').value;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?major=' + major + '&searchText=' + searchText, true);
+            xhr.open('GET', 'search.php?major=' + major + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
             xhr.send();
         }
 

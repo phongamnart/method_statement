@@ -15,19 +15,40 @@
         include("connect.php");
         $conDB = new db_conn();
 
-        if (isset($_GET['major']) || isset($_GET['searchText'])) {
+        if (isset($_GET['major']) || isset($_GET['searchText']) || (isset($_GET['start_date']) && isset($_GET['end_date']))) {
             $major = isset($_GET['major']) ? $_GET['major'] : '';
             $searchText = isset($_GET['searchText']) ? $_GET['searchText'] : '';
-            $sql = "SELECT * FROM documents WHERE 1=1";
+            $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+            $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+            $sql = "SELECT * FROM `documents` WHERE 1=1";
 
-            if (!empty($major) && !empty($searchText)) {
-                $sql .= " AND major = '$major' AND (doc_no LIKE '%$searchText%' OR doc_name LIKE '%$searchText%' OR date LIKE '%$searchText%' OR owner LIKE '%$searchText%')";
-            } elseif (!empty($major)) {
-                $sql .= " AND major = '$major'";
-            } elseif (!empty($searchText)) {
-                $sql .= " AND (doc_no LIKE '%$searchText%' OR doc_name LIKE '%$searchText%' OR owner LIKE '%$searchText%')";
+            if (!empty($major) || !empty($searchText) || (!empty($start_date) && !empty($end_date))) {
+                // Append WHERE clause based on conditions
+                $sql .= " AND";
+        
+                // Append major condition
+                if (!empty($major)) {
+                    $sql .= " `major` = '$major'";
+                }
+        
+                // Append searchText condition
+                if (!empty($searchText)) {
+                    if (!empty($major)) {
+                        $sql .= " AND";
+                    }
+                    $sql .= " (`doc_no` LIKE '%$searchText%' OR `doc_name` LIKE '%$searchText%' OR `date` LIKE '%$searchText%' OR `owner` LIKE '%$searchText%')";
+                }
+        
+                // Append date range condition
+                if (!empty($start_date) && !empty($end_date)) {
+                    if (!empty($major) || !empty($searchText)) {
+                        $sql .= " AND";
+                    }
+                    $sql .= " `date` BETWEEN '$start_date' AND '$end_date'";
+                }
             }
-
+            
+            echo "query: " . $sql;
             $result = $conDB->sqlQuery($sql);
 
             if (mysqli_num_rows($result) > 0) {
