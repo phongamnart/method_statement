@@ -13,7 +13,7 @@
 <body>
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <button class="btn btn-custom" onclick="history.back()" title="Back">
+            <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Back">
                 <i class="bi bi-arrow-left fs-4"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
