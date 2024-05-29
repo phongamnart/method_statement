@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
         .btn-custom {
             padding: 0.5rem 1rem;
@@ -32,7 +33,7 @@
     }
 
     ?>
-    <div class="container mt-3">
+    <div class="full-container-header">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="history.back()" title="Back">
                 <i class="bi bi-arrow-left fs-2"></i>
@@ -47,10 +48,10 @@
         </div>
         <div class="d-flex justify-content-end">
             <button onclick="window.location.href='download.php?id=<?php echo $id ?>'" title="Download .docx file" class="btn custom">
-                <i class="bi bi-file-arrow-down fs-1"></i>
+                <img src="insert_img/word.png" alt="home" width="50" height="50">
             </button>
             <button onclick="window.open('<?php echo $pdf_file; ?>', '_blank');" title="Download .pdf file" class="btn custom">
-                <i class="bi bi-file-earmark-pdf fs-1"></i>
+                <img src="insert_img/pdf.png" alt="home" width="50" height="50">
             </button>
         </div>
         <div class="row mt-3">

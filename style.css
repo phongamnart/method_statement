@@ -1,0 +1,152 @@
+.btn-custom {
+    padding: 0.5rem 1rem;
+    background-color: transparent !important;
+    border: none;
+    display: inline-block;
+}
+
+.table td,
+.table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.full-container {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.full-container-header-color {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+    background-color: #48D1CC;
+}
+
+.full-container-header {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+}
+
+.full-container th {
+    color: white;
+    background-color: gray;
+    border-color: white;
+}
+
+.full-container tbody tr:nth-child(odd) {
+    background-color: #DCDCDC;
+}
+
+.full-container tbody tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.table-responsive {
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    margin: 0;
+    border-color: white;
+    table-layout: fixed;
+    min-width: 800px;
+}
+
+.table th {
+    width: auto;
+}
+
+.table th:nth-child(1) {
+    width: 4%;
+}
+
+.table th:nth-child(2) {
+    width: 6%;
+}
+
+.table th:nth-child(3) {
+    width: 7%;
+}
+
+.table th:nth-child(4) {
+    width: 35%;
+}
+
+.table th:nth-child(5) {
+    width: 7%;
+}
+
+.table th:nth-child(6) {
+    width: 8%;
+}
+
+.table th:nth-child(7) {
+    width: 8%;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-clear {
+    background-color: transparent !important;
+    /*ลบพื้นหลัง*/
+    border: 5px solid #48D1CC;
+}
+
+.btn-circle {
+    /*ทำปุ่มกลม*/
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    overflow: hidden;
+    /*ตัดรูปถ้าเกินขอบ*/
+}
+
+.btn-main {
+    /*ปุ่มเข้าหน้า list_doc*/
+    width: 180px;
+    height: 180px;
+    border-radius: 100%;
+    overflow: hidden;
+    background-color: gold;
+    border: 5px solid gray;
+}
+
+.container-header {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+    background-color: #48D1CC;
+    color: white;
+}
+
+.container-footer {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+}
+
+.text-main {
+    color: gold;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.text-other {
+    color: #48D1CC;
+    font-size: 18px;
+    font-weight: bold;
+}

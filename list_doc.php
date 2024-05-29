@@ -7,79 +7,70 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .btn-custom {
-            padding: 0.5rem 1rem;
-            background-color: transparent !important;
-            border: none;
-        }
-
-        .table td,
-        .table th {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .text-left {
-            text-align: left !important;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <title>List Documents</title>
 </head>
 
 <body>
-    <div class="container mt-3">
+    <div class="full-container-header-color">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="window.location.href='index.php'" title="Back">
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <!-- <i class="bi bi-house fs-4"></i> -->
                 <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div>
-        <h1>List Documents</h1><br>
-        <div class="search-container mb-3 row">
-            <div class="col">
-                <select name="major" id="major" class="form-select">
-                    <option value="">All</option>
-                    <option value="civil">Civil</option>
-                    <option value="electrical">Electrical</option>
-                    <option value="mechanical">Mechanical</option>
-                </select>
+
+        <div class="search-container mb-3">
+            <div class="row">
+                <div class="col-md-2 d-flex justify-content-center">
+                    <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
+                        <img src="insert_img/add.png" alt="add" width="70" height="70">
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <label for="discipline">Discipline: </label>
+                    <select name="major" id="major" class="form-select">
+                        <option value="">All</option>
+                        <option value="civil">Civil</option>
+                        <option value="electrical">Electrical</option>
+                        <option value="mechanical">Mechanical</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="search">Search: </label>
+                    <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
+                </div>
             </div>
-            <div class="col-md-6">
-                <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
-            </div>
-            <div class="col">
-                <input type="date" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
-            </div>
-            <div class="col">
-                <input type="date" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
+            <div class="row mt-3">
+                <div class="col-md-2 offset-md-2">
+                    <label for="start">Form: </label>
+                    <input type="date" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
+                </div>
+                <div class="col-md-2">
+                    <label for="end">To: </label>
+                    <input type="date" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
+                </div>
             </div>
         </div>
-        <br>
-        <div class="d-flex justify-content-end">
-            <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
-                <!-- <i class="bi bi-file-earmark-plus fs-1"></i> -->
-                <img src="insert_img/add.png" alt="add" width="70" height="70">
-            </button>
-        </div>
-        <br>
+    </div>
+
+    <div class="full-container">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered fixed-table">
                 <thead class="table-secondary">
                     <tr>
-                        <th width="5%">Item</th>
-                        <th width="8%">Discipline</th>
-                        <th width="10%">Document No.</th>
-                        <th width="34%">Document Title</th>
-                        <th width="8%">Date</th>
-                        <th width="10%">Prepared By</th>
-                        <th width="10%">Revise</th>
+                        <th>Item</th>
+                        <th>Discipline</th>
+                        <th>Document No.</th>
+                        <th>Document Title</th>
+                        <th>Date</th>
+                        <th>Prepared By</th>
+                        <th>Revise</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,13 +96,14 @@
                             echo "<td class='text-left'>{$row['doc_name']}</td>";
                             echo "<td>{$row['date']}</td>";
                             echo "<td>{$row['owner']}</td>";
-
-                            echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
-                            <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
-                            </button>
-                            <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
-                            <img src='insert_img/delete.png' alt='delete' width='40' height='40'>
-                            </button>
+                            echo "<td><div class='button-group'>
+                                    <button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
+                                        <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
+                                    </button>
+                                    <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
+                                        <img src='insert_img/delete.png' alt='delete' width='40' height='40'>
+                                    </button>
+                                </div>
                             </td>";
                             echo "</tr>";
                         }
