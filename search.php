@@ -56,16 +56,13 @@
                 echo "<table class='table table-bordered'>";
                 echo "<thead class='table-dark'>";
                 echo "<tr>";
-                echo "<th>Item</th>";
-                echo "<th>Discipline</th>";
-                echo "<th>Document No.</th>";
-                echo "<th>Document Title</th>";
-                echo "<th>Date</th>";
-                echo "<th>Prepared By</th>";
-                echo "<th>Edit .docx</th>";
-                echo "<th>Download .docx</th>";
-                echo "<th>PDF</th>";
-                echo "<th>Delete</th>";
+                echo "<th width='5%'>Item</th>";
+                echo "<th width='8%'>Discipline</th>";
+                echo "<th width='10%'>Document No.</th>";
+                echo "<th width='49%'>Document Title</th>";
+                echo "<th width='8%'>Date</th>";
+                echo "<th width='10%'>Prepared By</th>";
+                echo "<th width='10%'>Revise</th>";
                 echo "</tr>";
                 echo "</thead>";
 
@@ -77,21 +74,13 @@
                     echo "<td>{$row['doc_name']}</td>";
                     echo "<td>{$row['date']}</td>";
                     echo "<td>{$row['owner']}</td>";
-                    echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn btn-primary'>Edit .docx</button></td>";
-
-                    if (!empty($row['doc_file'])) {
-                        echo "<td><button onclick=\"window.open('download.php?file={$row['doc_file']}')\" class='btn btn-secondary'>Download .docx</button></td>";
-                    } else {
-                        echo "<td>-</td>";
-                    }
-
-                    if (!empty($row['pdf_file'])) {
-                        echo "<td><button onclick=\"window.open('{$row['pdf_file']}', '_blank');\" class='btn btn-success'>PDF</button></td>";
-                    } else {
-                        echo "<td>-</td>";
-                    }
-
-                    echo "<td><button onclick='showDeleteModal({$row['id']})' class='btn btn-danger'>Delete</button></td>";
+                    echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
+                    <i class='bi bi-file-earmark-text fs-4'></i>
+                    </button>
+                    <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
+                    <i class='bi bi-trash fs-4'></i>
+                    </button>
+                    </td>";
                     echo "</tr>";
                 }
                 echo "</table>";
