@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
         mkdir($idDir, 0777, true);
     }
 
-    // $currentTime = date("YmdHis");
+    $date = date("Y-m-d");
     $randomNum = uniqid();
     $doc_file = $idDir . '/' . $doc_no . '.docx';
     $phpWord->save($doc_file); //docx file
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $pdf_file = $idDir . '/' . $doc_no . '.pdf';
     $mpdf->Output($pdf_file, 'F'); //pdf_file
 
-    $query = "UPDATE `documents` SET `doc_file` = '$doc_file', `tag_html` = '$tag_html', `pdf_file` = '$pdf_file' WHERE md5(`id`) = '$id'"; //update DB
+    $query = "UPDATE `documents` SET `doc_file` = '$doc_file', `tag_html` = '$tag_html', `pdf_file` = '$pdf_file', `date` = '$date' WHERE md5(`id`) = '$id'"; //update DB
     $conDB->sqlQuery($query);
 
     $alertMessage = "Files saved successfully as " . basename($doc_file) . " and " . basename($pdf_file) . ".";

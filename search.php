@@ -25,12 +25,12 @@
             if (!empty($major) || !empty($searchText) || (!empty($start_date) && !empty($end_date))) {
                 // Append WHERE clause based on conditions
                 $sql .= " AND";
-        
+
                 // Append major condition
                 if (!empty($major)) {
                     $sql .= " `major` = '$major'";
                 }
-        
+
                 // Append searchText condition
                 if (!empty($searchText)) {
                     if (!empty($major)) {
@@ -38,7 +38,7 @@
                     }
                     $sql .= " (`doc_no` LIKE '%$searchText%' OR `doc_name` LIKE '%$searchText%' OR `date` LIKE '%$searchText%' OR `owner` LIKE '%$searchText%')";
                 }
-        
+
                 // Append date range condition
                 if (!empty($start_date) && !empty($end_date)) {
                     if (!empty($major) || !empty($searchText)) {
@@ -47,7 +47,7 @@
                     $sql .= " `date` BETWEEN '$start_date' AND '$end_date'";
                 }
             }
-            
+
             // echo "query: " . $sql;
             $result = $conDB->sqlQuery($sql);
 
@@ -59,7 +59,7 @@
                 echo "<th width='5%'>Item</th>";
                 echo "<th width='8%'>Discipline</th>";
                 echo "<th width='10%'>Document No.</th>";
-                echo "<th width='49%'>Document Title</th>";
+                echo "<th width='34%'>Document Title</th>";
                 echo "<th width='8%'>Date</th>";
                 echo "<th width='10%'>Prepared By</th>";
                 echo "<th width='10%'>Revise</th>";
@@ -74,13 +74,14 @@
                     echo "<td>{$row['doc_name']}</td>";
                     echo "<td>{$row['date']}</td>";
                     echo "<td>{$row['owner']}</td>";
+
                     echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
-                    <i class='bi bi-file-earmark-text fs-4'></i>
-                    </button>
-                    <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
-                    <i class='bi bi-trash fs-4'></i>
-                    </button>
-                    </td>";
+                            <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
+                            </button>
+                            <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
+                            <img src='insert_img/delete.png' alt='delete' width='40' height='40'>
+                            </button>
+                            </td>";
                     echo "</tr>";
                 }
                 echo "</table>";

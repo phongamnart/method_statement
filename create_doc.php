@@ -14,13 +14,14 @@
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Back">
-                <i class="bi bi-arrow-left fs-4"></i>
+                <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <i class="bi bi-house fs-4"></i>
+                <!-- <i class="bi bi-house fs-4"></i> -->
+                <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='create_doc.php'" title="Refresh">
-                <i class="bi bi-arrow-clockwise fs-4"></i>
+                <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div><br>
         <h1 class="text-center mb-4">Create Document</h1>

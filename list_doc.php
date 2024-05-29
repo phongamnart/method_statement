@@ -31,13 +31,14 @@
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="window.location.href='index.php'" title="Back">
-                <i class="bi bi-arrow-left fs-4"></i>
+                <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <i class="bi bi-house fs-4"></i>
+                <!-- <i class="bi bi-house fs-4"></i> -->
+                <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
-                <i class="bi bi-arrow-clockwise fs-4"></i>
+                <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div>
         <h1>List Documents</h1><br>
@@ -62,19 +63,20 @@
         </div>
         <br>
         <div class="d-flex justify-content-end">
-            <button class="btn custom" onclick="location.href='create_doc.php'">
-                <i class="bi bi-file-earmark-plus fs-1"></i>
+            <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
+                <!-- <i class="bi bi-file-earmark-plus fs-1"></i> -->
+                <img src="insert_img/add.png" alt="add" width="70" height="70">
             </button>
         </div>
         <br>
         <div class="table-responsive">
             <table class="table table-bordered">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th width="5%">Item</th>
                         <th width="8%">Discipline</th>
                         <th width="10%">Document No.</th>
-                        <th width="49%">Document Title</th>
+                        <th width="34%">Document Title</th>
                         <th width="8%">Date</th>
                         <th width="10%">Prepared By</th>
                         <th width="10%">Revise</th>
@@ -105,10 +107,10 @@
                             echo "<td>{$row['owner']}</td>";
 
                             echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
-                            <i class='bi bi-file-earmark-text fs-4'></i>
+                            <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
                             </button>
                             <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
-                            <i class='bi bi-trash fs-4'></i>
+                            <img src='insert_img/delete.png' alt='delete' width='40' height='40'>
                             </button>
                             </td>";
                             echo "</tr>";

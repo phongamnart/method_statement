@@ -11,7 +11,7 @@
         .btn-clear {
             background-color: transparent !important;
             /*ลบพื้นหลัง*/
-            border: 2px solid black;
+            border: 5px solid aqua;
         }
 
         .btn-circle {
@@ -40,18 +40,18 @@
         <br><br><br><br>
         <div class="d-flex justify-content-center">
             <button onclick="window.location.href='list_doc.php'" class="btn btn-primary btn-main btn-clear"> <!--ปุ่มไปหน้า list_doc-->
-                <img src="insert_img/doc_img.png" alt="list_doc" width="150" height="150">
+                <img src="insert_img/all_doc.png" alt="list_doc" width="140" height="140">
             </button>
         </div>
         <div class="d-flex justify-content-end">
             <button onclick="searchDocuments('civil')" class="btn btn-primary btn-circle btn-clear mx-2"> <!--ปุ่มไปหน้าค้นหา Civil-->
-                <img src="insert_img/civil_img.png" alt="civil" width="120" height="120">
+                <img src="insert_img/civil.png" alt="civil" width="100" height="100">
             </button>
             <button onclick="searchDocuments('electrical')" class="btn btn-primary btn-circle btn-clear mx-2"> <!--ปุ่มไปหน้าค้นหา Electrical-->
-                <img src="insert_img/elec_img.png" alt="electrical" width="120" height="120">
+                <img src="insert_img/elec.png" alt="electrical" width="100" height="100">
             </button>
             <button onclick="searchDocuments('mechanical')" class="btn btn-primary btn-circle btn-clear mx-2"> <!--ปุ่มไปหน้าค้นหา Mechanical-->
-                <img src="insert_img/mec_img.png" alt="mechanical" width="120" height="120">
+                <img src="insert_img/mec.png" alt="mechanical" width="100" height="100">
             </button>
         </div>
     </div>

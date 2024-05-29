@@ -35,13 +35,14 @@
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="history.back()" title="Back">
-                <i class="bi bi-arrow-left fs-4"></i>
+                <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <i class="bi bi-house fs-4"></i>
+                <!-- <i class="bi bi-house fs-4"></i> -->
+                <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='edit_doc.php?id=<?php echo $id ?>'" title="Refresh">
-                <i class="bi bi-arrow-clockwise fs-4"></i>
+                <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div>
         <div class="d-flex justify-content-end">
