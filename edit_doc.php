@@ -8,6 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .btn-custom {
+            padding: 0.5rem 1rem;
+            background-color: transparent !important;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,6 +28,7 @@
 
     while ($objResult = mysqli_fetch_assoc($objQuery)) {
         $tag_html = $objResult['tag_html'];
+        $pdf_file = $objResult['pdf_file'];
     }
 
     ?>
@@ -34,6 +42,14 @@
             </button>
             <button class="btn btn-custom" onclick="window.location.href='edit_doc.php?id=<?php echo $id ?>'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-4"></i>
+            </button>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button onclick="window.location.href='download.php?id=<?php echo $id ?>'" title="Download .docx file" class="btn custom">
+                <i class="bi bi-file-arrow-down fs-1"></i>
+            </button>
+            <button onclick="window.open('<?php echo $pdf_file; ?>', '_blank');" title="Download .pdf file" class="btn custom">
+                <i class="bi bi-file-earmark-pdf fs-1"></i>
             </button>
         </div>
         <div class="row mt-3">

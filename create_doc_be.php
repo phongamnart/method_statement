@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $major = $_POST['major'];
     $doc_no = generateDocNo($major, $conDB);
     $doc_name = $_POST['doc_name'];
-    $date = date('Y-m-d H:i:s');
+    $date = date('Y-m-d');
     $owner = $_POST['owner'];
 
     echo $sql = "INSERT INTO `documents` (`major`, `doc_no`, `doc_name`, `date`, `owner`)
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $conDB->sqlQuery($sql);
 
-    $strSQL = "SELECT * FROM `documents` WHERE `date` = '$date' LIMIT 1";
+    $strSQL = "SELECT * FROM `documents` ORDER BY `id` DESC LIMIT 1";
     $objQuery = $conDB->sqlQuery($strSQL);
     while ($objResult = mysqli_fetch_assoc($objQuery)) {
         $id = $objResult['id'];

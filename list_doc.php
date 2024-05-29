@@ -19,6 +19,10 @@
             text-align: center;
             vertical-align: middle;
         }
+
+        .text-left {
+            text-align: left !important;
+        }
     </style>
     <title>List Documents</title>
 </head>
@@ -36,7 +40,7 @@
                 <i class="bi bi-arrow-clockwise fs-4"></i>
             </button>
         </div>
-        <h1>List Documents</h1>
+        <h1>List Documents</h1><br>
         <div class="search-container mb-3 row">
             <div class="col">
                 <select name="major" id="major" class="form-select">
@@ -50,29 +54,30 @@
                 <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
             </div>
             <div class="col">
-                <input type="datetime-local" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
+                <input type="date" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
             </div>
             <div class="col">
-                <input type="datetime-local" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
+                <input type="date" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
             </div>
         </div>
-
-        <button class="btn btn-success mb-3" onclick="location.href='create_doc.php'">Create document</button>
-        <br><br>
+        <br>
+        <div class="d-flex justify-content-end">
+            <button class="btn custom" onclick="location.href='create_doc.php'">
+                <i class="bi bi-file-earmark-plus fs-1"></i>
+            </button>
+        </div>
+        <br>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>Item</th>
-                        <th>Discipline</th>
-                        <th>Document No.</th>
-                        <th>Document Title</th>
-                        <th>Date</th>
-                        <th>Prepared By</th>
-                        <th>Edit .docx</th>
-                        <th>Download .docx</th>
-                        <th>PDF</th>
-                        <th>Delete</th>
+                        <th width="5%">Item</th>
+                        <th width="8%">Discipline</th>
+                        <th width="10%">Document No.</th>
+                        <th width="49%">Document Title</th>
+                        <th width="8%">Date</th>
+                        <th width="10%">Prepared By</th>
+                        <th width="10%">Revise</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,25 +100,17 @@
                             echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['major']}</td>";
                             echo "<td>{$row['doc_no']}</td>";
-                            echo "<td>{$row['doc_name']}</td>";
+                            echo "<td class='text-left'>{$row['doc_name']}</td>";
                             echo "<td>{$row['date']}</td>";
                             echo "<td>{$row['owner']}</td>";
 
-                            echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn btn-primary'>Edit .docx</button></td>";
-
-                            if (!empty($row['doc_file'])) {
-                                echo "<td><button onclick=\"window.location.href='download.php?id=" . md5($row['id']) . "'\" class='btn btn-secondary'>Download .docx</button></td>";
-                            } else {
-                                echo "<td>-</td>";
-                            }
-
-                            if (!empty($row['pdf_file'])) {
-                                echo "<td><button onclick=\"window.open('{$row['pdf_file']}', '_blank');\" class='btn btn-success'>PDF</button></td>";
-                            } else {
-                                echo "<td>-</td>";
-                            }
-
-                            echo "<td><button onclick='showDeleteModal({$row['id']})' class='btn btn-danger'>Delete</button></td>";
+                            echo "<td><button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
+                            <i class='bi bi-file-earmark-text fs-4'></i>
+                            </button>
+                            <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
+                            <i class='bi bi-trash fs-4'></i>
+                            </button>
+                            </td>";
                             echo "</tr>";
                         }
                     }
@@ -123,7 +120,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true"> <!--confirm delete style-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

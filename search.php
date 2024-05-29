@@ -48,7 +48,7 @@
                 }
             }
             
-            echo "query: " . $sql;
+            // echo "query: " . $sql;
             $result = $conDB->sqlQuery($sql);
 
             if (mysqli_num_rows($result) > 0) {
