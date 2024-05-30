@@ -156,7 +156,7 @@
             xhr.send();
         }
 
-        document.getElementById('major').addEventListener('change', function() { //รับ major จาก index
+        document.getElementById('major').addEventListener('change', function() {
             var major = this.value;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
