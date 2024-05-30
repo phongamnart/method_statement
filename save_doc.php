@@ -32,9 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $phpWord = new PhpWord();
     $section1 = $phpWord->addSection();
 
-    $doc = new DOMDocument(); //create obj
+    // กำหนดฟอนต์และสไตล์สำหรับเนื้อหาที่รองรับภาษาไทย
+    // $fontStyleName = 'thaiStyle';
+    // $phpWord->addFontStyle($fontStyleName, array('name' => 'TH SarabunPSK', 'size' => 16));
+
+    $doc = new DOMDocument('1.0', 'UTF-8'); //create obj และกำหนดให้ใช้ UTF-8
     libxml_use_internal_errors(true); //manage error
-    $doc->loadHTML('<html><body>' . $content . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD); //load html
+    $doc->loadHTML('<?xml encoding="UTF-8"><html><body>' . $content . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD); //load html พร้อมกำหนด encoding
     libxml_clear_errors(); //clear error
 
     $body = $doc->getElementsByTagName('body')->item(0); //ดึง <body>
@@ -47,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
                 $section1->addImage($imgSrc); //add image ที่ได้จาก <src>
             } else { //ถ้าไม่มี <figure> และ <img>
                 $htmlContent = $doc->saveHTML($childNode); //เก็บไว้ในตัวแปล $htmlContent
-                Html::addHtml($section1, $htmlContent, false, false); //convert html to text
+                Html::addHtml($section1, $htmlContent, false, false); //convert html to text พร้อมกำหนดฟอนต์
             }
         }
     } else {
@@ -65,11 +69,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $date = date("Y-m-d");
     $randomNum = uniqid();
     $doc_file = $idDir . '/' . $doc_no . '.docx';
-    $phpWord->save($doc_file); //docx file
+
+    // ลองตรวจสอบและลบไฟล์เดิมหากมีอยู่
+    if (file_exists($doc_file)) {
+        unlink($doc_file);
+    }
+
+    // บันทึกไฟล์ DOCX
+    $phpWord->save($doc_file);
 
     $tag_html = htmlspecialchars($content, ENT_QUOTES, 'UTF-8'); //tag_html
 
-    $mpdf = new Mpdf();
+    // สร้างไฟล์ PDF
+    $mpdf = new Mpdf(['mode' => 'UTF-8']);
     $mpdf->WriteHTML($content);
     $pdf_file = $idDir . '/' . $doc_no . '.pdf';
     $mpdf->Output($pdf_file, 'F'); //pdf_file

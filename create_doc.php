@@ -18,8 +18,7 @@
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <!-- <i class="bi bi-house fs-4"></i> -->
-                <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
+                <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='create_doc.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>

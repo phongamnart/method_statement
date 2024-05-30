@@ -72,7 +72,7 @@
                     echo "<td>{$row['id']}</td>";
                     echo "<td>{$row['major']}</td>";
                     echo "<td>{$row['doc_no']}</td>";
-                    echo "<td>{$row['doc_name']}</td>";
+                    echo "<td class='text-left'>{$row['doc_name']}</td>";
                     echo "<td>{$row['date']}</td>";
                     echo "<td>{$row['owner']}</td>";
                     echo "<td><div class='button-group'>

@@ -18,13 +18,12 @@
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/ite_logo.png" alt="home" width="150" height="45">
+                <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div>
-
         <div class="search-container mb-3">
             <div class="row">
                 <div class="col-md-2 d-flex justify-content-center">
@@ -41,13 +40,11 @@
                         <option value="mechanical">Mechanical</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="search">Search: </label>
                     <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-2 offset-md-2">
+                <div class="col-md-2">
                     <label for="start">Form: </label>
                     <input type="date" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
                 </div>
