@@ -1,10 +1,10 @@
 <?php
 include("connect.php");
 $conDB = new db_conn();
-function generateDocNo($major, $conDB)
+function generateDocNo($discipline, $conDB)
 {
     $prefix = '';
-    switch ($major) {
+    switch ($discipline) {
         case 'Civil':
             $prefix = 'MS-CE-';
             break;
@@ -16,7 +16,7 @@ function generateDocNo($major, $conDB)
             break;
     }
 
-    $sql = "SELECT `doc_no` FROM `documents` WHERE `major`='$major' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT `doc_no` FROM `documents` WHERE `discipline`='$discipline' ORDER BY id DESC LIMIT 1";
     $result = $conDB->sqlQuery($sql);
     $latest_doc_no = mysqli_fetch_assoc($result);
 
@@ -31,14 +31,14 @@ function generateDocNo($major, $conDB)
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $major = $_POST['major'];
-    $doc_no = generateDocNo($major, $conDB);
+    $discipline = $_POST['discipline'];
+    $doc_no = generateDocNo($discipline, $conDB);
     $doc_name = $_POST['doc_name'];
     $date = date('Y-m-d');
-    $owner = $_POST['owner'];
+    $prepared_by = $_POST['prepared_by'];
 
-    echo $sql = "INSERT INTO `documents` (`major`, `doc_no`, `doc_name`, `date`, `owner`)
-            VALUES ('$major', '$doc_no', '$doc_name', '$date', '$owner')";
+    echo $sql = "INSERT INTO `documents` (`discipline`, `doc_no`, `doc_name`, `date`, `prepared_by`)
+            VALUES ('$discipline', '$doc_no', '$doc_name', '$date', '$prepared_by')";
 
     $conDB->sqlQuery($sql);
 

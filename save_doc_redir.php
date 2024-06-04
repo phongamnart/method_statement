@@ -148,12 +148,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
                     <p id="alertMessage"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='list_doc.php'">OK</button>
+                    <button type="button" class="btn btn-primary" onclick="Redirect()">OK</button>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function Redirect() {
+            var discipline = "<?php echo $discipline; ?>";
 
+            if (discipline === 'Civil') {
+                window.location.href = 'list_civil.php';
+            } else if (discipline === 'Electrical') {
+                window.location.href = 'list_elec.php';
+            } else if (discipline === 'Mechanical') {
+                window.location.href = 'list_mec.php';
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </body>

@@ -13,18 +13,18 @@
 
 <body>
     <div class="full-container-header-color">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-custom" onclick="history.back()" title="Back">
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
                 <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
             </button>
-            <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
+            <button class="btn btn-custom" onclick="window.location.href='list_elec.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
             </button>
         </div>
-        <div class="search-container">
+        <div class="search-container mb-3">
             <div class="row">
                 <div class="col-md-2 d-flex justify-content-center">
                     <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="discipline">Discipline: </label>
-                    <select name="major" id="major" class="form-select">
+                    <select name="discipline" id="discipline" class="form-select">
                         <option value="">All</option>
                         <option value="civil">Civil</option>
                         <option value="electrical">Electrical</option>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="discipline">Work: </label>
-                    <select name="major" id="major" class="form-select">
+                    <select name="discipline" id="discipline" class="form-select">
                         <option value="">All</option>
                         <option value="civil">Civil</option>
                         <option value="electrical">Electrical</option>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="discipline">Type: </label>
-                    <select name="major" id="major" class="form-select">
+                    <select name="discipline" id="discipline" class="form-select">
                         <option value="">All</option>
                         <option value="civil">Civil</option>
                         <option value="electrical">Electrical</option>
@@ -93,12 +93,7 @@
                     include("connect.php");
                     $conDB = new db_conn();
 
-                    if (isset($_GET['discipline'])) {
-                        $discipline = $_GET['discipline'];
-                        $sql = "SELECT * FROM `documents` WHERE `discipline` = '$discipline'";
-                    } else {
-                        $sql = "SELECT * FROM documents";
-                    }
+                    $sql = "SELECT * FROM `documents` WHERE `discipline` = 'electrical'";
 
                     $result = $conDB->sqlQuery($sql);
 
@@ -112,7 +107,7 @@
                             echo "<td>{$row['date']}</td>";
                             echo "<td>{$row['prepared_by']}</td>";
                             echo "<td><div class='button-group'>
-                                    <button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
+                                    <button onclick=\"location.href='edit_doc_redir.php?id=" . md5($row['id']) . "'\" class='btn custom'>
                                         <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
                                     </button>
                                     <button onclick='showDeleteModal({$row['id']})' class='btn custom'>

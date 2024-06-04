@@ -28,8 +28,8 @@
         <form action="create_doc_be.php" method="post" enctype="multipart/form-data">
             <div class="container d-flex justify-content-center">
                 <div class="mb-3 col-8">
-                    <label for="major" class="form-label">Discipline:</label>
-                    <select name="major" id="major" class="form-select" required>
+                    <label for="discipline" class="form-label">Discipline:</label>
+                    <select name="discipline" id="discipline" class="form-select" required>
                         <option value="">-- Select Discipline --</option>
                         <option value="Civil">Civil</option>
                         <option value="Electrical">Electrical</option>
@@ -47,8 +47,8 @@
 
             <div class="container d-flex justify-content-center">
                 <div class="mb-3 col-8">
-                    <label for="owner" class="form-label">Prepared By:</label>
-                    <input type="text" name="owner" id="owner" class="form-control" required>
+                    <label for="prepared_by" class="form-label">Prepared By:</label>
+                    <input type="text" name="prepared_by" id="prepared_by" class="form-control" required>
                 </div>
             </div><br>
 

@@ -26,21 +26,21 @@
 
         <div class="d-flex justify-content-end">
             <div class="text-center mx-2 text-other">
-                <button onclick="searchDocuments('civil')" class="btn btn-primary btn-circle btn-clear mx-2" title="Civil"> <!--ปุ่มไปหน้าค้นหา Civil-->
+                <button onclick="window.location.href='list_civil.php'" class="btn btn-primary btn-circle btn-clear mx-2" title="Civil"> <!--ปุ่มไปหน้าค้นหา Civil-->
                     <img src="insert_img/civil.png" alt="civil" width="100" height="100">
                 </button>
                 <p>Civil</p>
             </div>
 
             <div class="text-center mx-2 text-other">
-                <button onclick="searchDocuments('electrical')" class="btn btn-primary btn-circle btn-clear mx-2" title="Electrical"> <!--ปุ่มไปหน้าค้นหา Electrical-->
+                <button onclick="window.location.href='list_elec.php'" class="btn btn-primary btn-circle btn-clear mx-2" title="Electrical"> <!--ปุ่มไปหน้าค้นหา Electrical-->
                     <img src="insert_img/elec.png" alt="electrical" width="100" height="100">
                 </button>
                 <p>Electrical</p>
             </div>
 
             <div class="text-center mx-2 text-other">
-                <button onclick="searchDocuments('mechanical')" class="btn btn-primary btn-circle btn-clear mx-2" title="Mechanical"> <!--ปุ่มไปหน้าค้นหา Mechanical-->
+                <button onclick="window.location.href='list_mec.php'" class="btn btn-primary btn-circle btn-clear mx-2" title="Mechanical"> <!--ปุ่มไปหน้าค้นหา Mechanical-->
                     <img src="insert_img/mec.png" alt="mechanical" width="100" height="100">
                 </button>
                 <p>Mechanical</p>
