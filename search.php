@@ -16,40 +16,40 @@
         include("connect.php");
         $conDB = new db_conn();
 
-        if (isset($_GET['major']) || isset($_GET['searchText']) || (isset($_GET['start_date']) && isset($_GET['end_date']))) {
-            $major = isset($_GET['major']) ? $_GET['major'] : '';
+        if (isset($_GET['discipline']) || isset($_GET['searchText']) || (isset($_GET['start_date']) && isset($_GET['end_date']))) {
+            $discipline = isset($_GET['discipline']) ? $_GET['discipline'] : '';
             $searchText = isset($_GET['searchText']) ? $_GET['searchText'] : '';
             $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
             $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
             $sql = "SELECT * FROM `documents` WHERE 1=1";
 
-            if (!empty($major) || !empty($searchText) || (!empty($start_date) && !empty($end_date))) {
+            if (!empty($discipline) || !empty($searchText) || (!empty($start_date) && !empty($end_date))) {
                 // Append WHERE clause based on conditions
                 $sql .= " AND";
 
-                // Append major condition
-                if (!empty($major)) {
-                    $sql .= " `major` = '$major'";
+                // Append discipline condition
+                if (!empty($discipline)) {
+                    $sql .= " `discipline` = '$discipline'";
                 }
 
                 // Append searchText condition
                 if (!empty($searchText)) {
-                    if (!empty($major)) {
+                    if (!empty($discipline)) {
                         $sql .= " AND";
                     }
-                    $sql .= " (`doc_no` LIKE '%$searchText%' OR `doc_name` LIKE '%$searchText%' OR `date` LIKE '%$searchText%' OR `owner` LIKE '%$searchText%')";
+                    $sql .= " (`doc_no` LIKE '%$searchText%' OR `doc_name` LIKE '%$searchText%' OR `date` LIKE '%$searchText%' OR `prepared_by` LIKE '%$searchText%')";
                 }
 
                 // Append date range condition
                 if (!empty($start_date) && !empty($end_date)) {
-                    if (!empty($major) || !empty($searchText)) {
+                    if (!empty($discipline) || !empty($searchText)) {
                         $sql .= " AND";
                     }
                     $sql .= " `date` BETWEEN '$start_date' AND '$end_date'";
                 }
             }
 
-            // echo "query: " . $sql;
+            echo "query: " . $sql;
             $result = $conDB->sqlQuery($sql);
 
             if (mysqli_num_rows($result) > 0) {
@@ -70,11 +70,11 @@
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
                     echo "<td>{$row['id']}</td>";
-                    echo "<td>{$row['major']}</td>";
+                    echo "<td>{$row['discipline']}</td>";
                     echo "<td>{$row['doc_no']}</td>";
                     echo "<td class='text-left'>{$row['doc_name']}</td>";
                     echo "<td>{$row['date']}</td>";
-                    echo "<td>{$row['owner']}</td>";
+                    echo "<td>{$row['prepared_by']}</td>";
                     echo "<td><div class='button-group'>
                             <button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
                                 <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>

@@ -18,7 +18,7 @@
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
+                <img src="insert_img/logo.svg" alt="home" width="200" height="100">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
@@ -33,30 +33,16 @@
                 </div>
                 <div class="col-md-2">
                     <label for="discipline">Discipline: </label>
-                    <select name="major" id="major" class="form-select">
+                    <select name="discipline" id="discipline" class="form-select" onchange="updateWorkOptions()">
                         <option value="">All</option>
-                        <option value="civil">Civil</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="mechanical">Mechanical</option>
+                        <option value="Civil">Civil</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Mechanical">Mechanical</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="discipline">Work: </label>
-                    <select name="major" id="major" class="form-select">
-                        <option value="">All</option>
-                        <option value="civil">Civil</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="mechanical">Mechanical</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="discipline">Type: </label>
-                    <select name="major" id="major" class="form-select">
-                        <option value="">All</option>
-                        <option value="civil">Civil</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="mechanical">Mechanical</option>
-                    </select>
+                    <label for="work">Work: </label>
+                    <select name="work" id="work" class="form-select"></select>
                 </div>
                 <div class="col-md-4">
                     <label for="search">Search: </label>
@@ -171,6 +157,39 @@
             xhr.send();
         }
 
+        function updateWorkOptions() {
+            var discipline = document.getElementById("discipline");
+            var work = document.getElementById("work");
+
+            work.innerHTML = '';
+
+            if (discipline.value === "Civil") {
+                var civilWorks = ["Architectural Works", "Civil Works", "Miscellaneous", "Structural Works"];
+                civilWorks.forEach(function(option) {
+                    var optionElement = document.createElement("option");
+                    optionElement.textContent = option;
+                    optionElement.value = option;
+                    work.appendChild(optionElement);
+                });
+            } else if (discipline.value === "Electrical") {
+                var electricalWorks = ["Installation", "Test", "Transportation"];
+                electricalWorks.forEach(function(option) {
+                    var optionElement = document.createElement("option");
+                    optionElement.textContent = option;
+                    optionElement.value = option;
+                    work.appendChild(optionElement);
+                });
+            } else if (discipline.value === "Mechanical") {
+                var electricalWorks = ["Air condition and Ventilation", "Sanitary and Fire protection"];
+                electricalWorks.forEach(function(option) {
+                    var optionElement = document.createElement("option");
+                    optionElement.textContent = option;
+                    optionElement.value = option;
+                    work.appendChild(optionElement);
+                });
+            }
+        }
+
         document.getElementById('discipline').addEventListener('change', function() {
             var discipline = this.value;
             var xhr = new XMLHttpRequest();
@@ -179,7 +198,19 @@
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?discipline=' + discipline, true);
+            xhr.open('GET', 'test_search.php?discipline=' + discipline, true);
+            xhr.send();
+        });
+
+        document.getElementById('work').addEventListener('change', function() {
+            var work = this.value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.querySelector('table').innerHTML = this.responseText;
+                }
+            };
+            xhr.open('GET', 'test_search.php?work=' + work, true);
             xhr.send();
         });
     </script>

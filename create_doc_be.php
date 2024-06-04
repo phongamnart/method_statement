@@ -32,13 +32,14 @@ function generateDocNo($discipline, $conDB)
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $discipline = $_POST['discipline'];
+    $work = $_POST['work'];
     $doc_no = generateDocNo($discipline, $conDB);
     $doc_name = $_POST['doc_name'];
     $date = date('Y-m-d');
     $prepared_by = $_POST['prepared_by'];
 
-    echo $sql = "INSERT INTO `documents` (`discipline`, `doc_no`, `doc_name`, `date`, `prepared_by`)
-            VALUES ('$discipline', '$doc_no', '$doc_name', '$date', '$prepared_by')";
+    $sql = "INSERT INTO `documents` (`discipline`, `work`, `doc_no`, `doc_name`, `date`, `prepared_by`)
+            VALUES ('$discipline', '$work', '$doc_no', '$doc_name', '$date', '$prepared_by')";
 
     $conDB->sqlQuery($sql);
 

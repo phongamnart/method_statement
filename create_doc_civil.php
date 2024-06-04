@@ -29,11 +29,8 @@
             <div class="container d-flex justify-content-center">
                 <div class="mb-3 col-8">
                     <label for="discipline" class="form-label">Discipline:</label>
-                    <select name="discipline" id="discipline" class="form-select" required onchange="updateWorkOptions()">
-                        <option value="">-- Select Discipline --</option>
+                    <select name="discipline" id="discipline" class="form-select" required>
                         <option value="Civil">Civil</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Mechanical">Mechanical</option>
                     </select>
                 </div>
             </div>
@@ -42,6 +39,11 @@
                 <div class="mb-3 col-8">
                     <label for="work" class="form-label">Work:</label>
                     <select name="work" id="work" class="form-select" required>
+                    <option value="">-- Select Work --</option>
+                        <option value="Architectural Works">Architectural Works</option>
+                        <option value="Civil Works">Civil Works</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                        <option value="Structural Works">Structural Works</option>
                     </select>
                 </div>
             </div>
@@ -79,40 +81,6 @@
 
         </form>
     </div>
-    <script>
-        function updateWorkOptions() {
-            var discipline = document.getElementById("discipline");
-            var work = document.getElementById("work");
-
-            work.innerHTML = '';
-
-            if (discipline.value === "Civil") {
-                var civilWorks = ["Architectural Works", "Civil Works", "Miscellaneous", "Structural Works"];
-                civilWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Electrical") {
-                var electricalWorks = ["Installation", "Test", "Transportation"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Mechanical") {
-                var electricalWorks = ["Air condition and Ventilation", "Sanitary and Fire protection"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            }
-        }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </body>

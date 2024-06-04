@@ -18,7 +18,7 @@
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
+                <img src="insert_img/logo.svg" alt="home" width="200" height="100">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='list_civil.php'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
@@ -27,26 +27,24 @@
         <div class="search-container mb-3">
             <div class="row">
                 <div class="col-md-2 d-flex justify-content-center">
-                    <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
+                    <button class="btn custom" onclick="location.href='create_doc_civil.php'" title="add file">
                         <img src="insert_img/add.png" alt="add" width="70" height="70">
                     </button>
                 </div>
                 <div class="col-md-2">
                     <label for="discipline">Discipline: </label>
                     <select name="discipline" id="discipline" class="form-select">
-                        <option value="">All</option>
-                        <option value="civil">Civil</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="mechanical">Mechanical</option>
+                        <option value="Civil">Civil</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="discipline">Work: </label>
-                    <select name="discipline" id="discipline" class="form-select">
+                    <label for="work">Work: </label>
+                    <select name="work" id="work" class="form-select">
                         <option value="">All</option>
-                        <option value="civil">Civil</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="mechanical">Mechanical</option>
+                        <option value="Architectural Works">Architectural Works</option>
+                        <option value="Civil Works">Civil Works</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                        <option value="Structural Works">Structural Works</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -107,7 +105,7 @@
                             echo "<td>{$row['date']}</td>";
                             echo "<td>{$row['prepared_by']}</td>";
                             echo "<td><div class='button-group'>
-                                    <button onclick=\"location.href='edit_doc_redir.php?id=" . md5($row['id']) . "'\" class='btn custom'>
+                                    <button onclick=\"location.href='edit_doc_fix.php?id=" . md5($row['id']) . "'\" class='btn custom'>
                                         <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
                                     </button>
                                     <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
@@ -153,6 +151,7 @@
 
         function searchDocuments() { //search
             var discipline = document.getElementById('discipline').value;
+            var work = document.getElementById('work').value;
             var searchText = document.getElementById('searchText').value;
             var start_date = document.getElementById('start_date').value;
             var end_date = document.getElementById('end_date').value;
@@ -162,7 +161,7 @@
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?discipline=' + discipline + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
+            xhr.open('GET', 'search.php?discipline=' + discipline  + '&work=' + work + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
             xhr.send();
         }
 

@@ -65,7 +65,7 @@
                 <i class="bi bi-arrow-left fs-2"></i>
             </button>
             <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/ite_logo.png" alt="home" width="200" height="60">
+                <img src="insert_img/logo.svg" alt="home" width="200" height="100">
             </button>
             <button class="btn btn-custom" onclick="window.location.href='edit_doc.php?id=<?php echo $id ?>'" title="Refresh">
                 <i class="bi bi-arrow-clockwise fs-2"></i>
@@ -73,7 +73,7 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <form action="save_doc_redir.php" method="post">
+                <form action="save_doc_fix.php" method="post">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="inline-elements">
                             <h2 id="docNo"><?php echo htmlspecialchars($doc_no); ?></h2>

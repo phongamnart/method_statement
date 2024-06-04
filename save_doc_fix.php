@@ -109,8 +109,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     $query = "UPDATE `documents` SET `doc_file` = '$doc_file', `tag_html` = '$tag_html', `pdf_file` = '$pdf_file', `date` = '$date' WHERE md5(`id`) = '$id'"; //update DB
     $conDB->sqlQuery($query);
 
-    // $alertMessage = "Files saved successfully as " . basename($doc_file) . " and " . basename($pdf_file) . ".";
-    $alertMessage = $discipline;
+    $alertMessage = "Files saved successfully as " . basename($doc_file) . " and " . basename($pdf_file) . ".";
+    // $alertMessage = $discipline;
 
     //alert success
     echo "<script>
