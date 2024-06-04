@@ -47,7 +47,7 @@
                         <option value="Structural Works">Structural Works</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <!-- <div class="col-md-2">
                     <label for="discipline">Type: </label>
                     <select name="discipline" id="discipline" class="form-select">
                         <option value="">All</option>
@@ -55,7 +55,7 @@
                         <option value="electrical">Electrical</option>
                         <option value="mechanical">Mechanical</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="col-md-4">
                     <label for="search">Search: </label>
                     <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
@@ -161,7 +161,7 @@
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?discipline=' + discipline  + '&work=' + work + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
+            xhr.open('GET', 'test_search.php?discipline=' + discipline  + '&work=' + work + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
             xhr.send();
         }
 
@@ -173,7 +173,18 @@
                     document.querySelector('table').innerHTML = this.responseText;
                 }
             };
-            xhr.open('GET', 'search.php?discipline=' + discipline, true);
+            xhr.open('GET', 'test_search.php?discipline=' + discipline, true);
+            xhr.send();
+        });
+        document.getElementById('work').addEventListener('change', function() {
+            var work = this.value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.querySelector('table').innerHTML = this.responseText;
+                }
+            };
+            xhr.open('GET', 'test_search.php?work=' + work, true);
             xhr.send();
         });
     </script>
