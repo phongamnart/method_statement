@@ -1,120 +1,111 @@
+<?php
+session_start();
+include("connect.php");
+$conDB = new db_conn();
+
+$create_discipline = isset($_SESSION['create_discipline']) ? $_SESSION['create_discipline'] : '';
+$create_work = isset($_SESSION['create_work']) ? $_SESSION['create_work'] : '';
+$create_type = isset($_SESSION['create_type']) ? $_SESSION['create_type'] : '';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <?php include("_header.php"); ?>
     <title>Create Document</title>
 </head>
 
 <body>
     <div class="full-container-header">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Back">
-                <i class="bi bi-arrow-left fs-2"></i>
-            </button>
-            <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/logo.svg" alt="home" width="200" height="100">
-            </button>
-            <button class="btn btn-custom" onclick="window.location.href='create_doc.php'" title="Refresh">
-                <i class="bi bi-arrow-clockwise fs-2"></i>
-            </button>
-        </div><br>
-        <h1 class="text-center mb-4">Create Document</h1>
         <form action="create_doc_be.php" method="post" enctype="multipart/form-data">
-            <div class="container d-flex justify-content-center">
-                <div class="mb-3 col-8">
-                    <label for="discipline" class="form-label">Discipline:</label>
-                    <select name="discipline" id="discipline" class="form-select" required onchange="updateWorkOptions()">
-                        <option value="">-- Select Discipline --</option>
-                        <option value="Civil">Civil</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Mechanical">Mechanical</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="container d-flex justify-content-center">
-                <div class="mb-3 col-8">
-                    <label for="work" class="form-label">Work:</label>
-                    <select name="work" id="work" class="form-select" required>
-                    </select>
-                </div>
-            </div>
-
-            <div class="container d-flex justify-content-center">
-                <div class="mb-3 col-8">
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
                     <label for="doc_name" class="form-label">Document Title:</label>
                     <input type="text" name="doc_name" id="doc_name" class="form-control" required>
                 </div>
             </div>
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
+                    <label for="create_discipline">Discipline: </label>
+                    <select name="discipline" id="discipline" class="form-select" onchange="setFillter('create_discipline',this.value)">
+                        <option value="" <?php if ($create_discipline == '') {
+                                                echo "selected";
+                                            } ?>>แสดงทั้งหมด</option>
+                        <?php
+                        $sql2 = "SELECT DISTINCT `discipline` FROM `type`";
+                        $objQuery = $conDB->sqlQuery($sql2);
 
-            <div class="container d-flex justify-content-center">
-                <div class="mb-3 col-8">
+                        while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                            <option value="<?php echo $objResult['discipline']; ?>" <?php if ($create_discipline == $objResult['discipline']) {
+                                                                                        echo "selected";
+                                                                                    } ?>><?php echo $objResult['discipline']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
+                    <label for="create_work">Work: </label>
+                    <select name="work" id="work" class="form-select" onchange="setFillter('create_work',this.value)">
+                        <option value="" <?php if ($create_work == '') {
+                                                echo "selected";
+                                            } ?>>แสดงทั้งหมด</option>
+                        <?php
+                        if ($create_discipline != "") {
+                            $condition2 = " AND `discipline` = '$create_discipline'";
+                        }
+                        $sql2 = "SELECT DISTINCT `work` FROM `type` WHERE `enable` = 1" . $condition2;
+                        $objQuery = $conDB->sqlQuery($sql2);
+
+                        while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                            <option value="<?php echo $objResult['work']; ?>" <?php if ($create_work == $objResult['work']) {
+                                                                                    echo "selected";
+                                                                                } ?>><?php echo $objResult['work']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
+                    <label for="create_type">Type: </label>
+                    <select name="type" id="type" class="form-select" onchange="setFillter('create_type',this.value)">
+                        <option value="" <?php if ($create_type == '') {
+                                                echo "selected";
+                                            } ?>>แสดงทั้งหมด</option>
+                        <?php
+                        if ($create_work != "") {
+                            $condition2 = " AND `work` = '$create_work'";
+                        }
+                        $sql2 = "SELECT DISTINCT `type` FROM `type` WHERE `enable` = 1" . $condition2;
+                        $objQuery = $conDB->sqlQuery($sql2);
+
+                        while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                            <option value="<?php echo $objResult['type']; ?>" <?php if ($create_type == $objResult['type']) {
+                                                                                    echo "selected";
+                                                                                } ?>><?php echo $objResult['type']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="container d-flex justify-content-end">
+                <div class="mb-3 col-6">
                     <label for="prepared_by" class="form-label">Prepared By:</label>
                     <input type="text" name="prepared_by" id="prepared_by" class="form-control" required>
                 </div>
             </div><br>
 
-            <!-- เผื่อเพิ่ม -->
-            <!-- <div class="mb-3">
-                <label for="doc_file" class="form-label">Upload DOC File:</label>
-                <input type="file" name="doc_file" id="doc_file" class="form-control" accept=".doc,.docx">
-            </div>
-
-            <div class="mb-3">
-                <label for="pdf_file" class="form-label">Upload PDF File:</label>
-                <input type="file" name="pdf_file" id="pdf_file" class="form-control" accept=".pdf">
-            </div> -->
-
             <div class="container d-flex justify-content-center">
                 <div class="mb-3 col-8 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success">Create Document</button> <!-- ปุ่มสร้างเอกสาร -->
+                    <button type="submit" class="btn btn-success">Create Document</button>
                 </div>
             </div>
-
         </form>
     </div>
-    <script>
-        function updateWorkOptions() {
-            var discipline = document.getElementById("discipline");
-            var work = document.getElementById("work");
-
-            work.innerHTML = '';
-
-            if (discipline.value === "Civil") {
-                var civilWorks = ["Architectural Works", "Civil Works", "Miscellaneous", "Structural Works"];
-                civilWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Electrical") {
-                var electricalWorks = ["Installation", "Test", "Transportation"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Mechanical") {
-                var electricalWorks = ["Air condition and Ventilation", "Sanitary and Fire protection"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            }
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <?php include("_script.php"); ?>
 </body>
 
 </html>

@@ -48,6 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     while ($objResult = mysqli_fetch_assoc($objQuery)) {
         $id = $objResult['id'];
     }
-    header("Location: edit_doc.php?id=".md5($id)."");
+    $_SESSION['discipline'] = $_POST['discipline'];
+    $_SESSION['work'] = "";
+    $_SESSION['type'] = "";
+    
+    header("Location: edit_doc.php?id=" . md5($id) . "");
     exit();
 }

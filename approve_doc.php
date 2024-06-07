@@ -3,43 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>CKEditor 5 Example</title>
-    <!-- <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .btn-custom {
-            padding: 0.5rem 1rem;
-            background-color: transparent !important;
-            border: none;
-        }
-
-        #container {
-            width: 100%;
-            margin: 20px auto;
-            padding: 20px auto;
-        }
-
-        .ck-editor__editable[role="textbox"] {
-            /* Editing area */
-            /* width: 21cm; */
-            width: 100%;
-            height: 29.7cm;
-        }
-
-        .ck-content .image {
-            /* Block images */
-            max-width: 80%;
-            margin: 20px auto;
-        }
-
-        .inline-elements h2 {
-            display: inline;
-            margin-right: 10px;
-        }
-    </style>
+    <title>Approve Documents</title>
+    <?php include("_header.php"); ?>
 </head>
 
 <body>
@@ -73,11 +38,11 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <form action="save_doc_fix.php" method="post">
+                <form action="approve_doc_be.php" method="post">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="inline-elements">
-                            <h2 id="docNo"><?php echo htmlspecialchars($doc_no); ?></h2>
-                            <h2><?php echo htmlspecialchars($doc_name); ?></h2>
+                            <h2 id="docNo"><?php echo $doc_no; ?></h2>
+                            <h2><?php echo $doc_name; ?></h2>
                         </div>
                         <div>
                             <button onclick="window.location.href='download.php?id=<?php echo $id ?>'" title="Download .docx file" class="btn custom">
@@ -91,7 +56,12 @@
                     <input type="hidden" name="id" value="<?php echo $id; ?>">
                     <textarea name="editor_content" id="editor"><?php echo $tag_html; ?></textarea>
                     <br>
-                    <input type="submit" value="Save as Word" class="btn btn-success">
+                    <div class="input-container">
+                        <input type="submit" name="approve" value="Approve" class="btn btn-success">
+                        <input type="submit" name="reject" value="Reject" class="btn btn-danger">
+                        <input type="text" name="reject_reason" id="reject_reason" class="form-control" placeholder="Reason reject...">
+                    </div>
+
                 </form>
             </div>
         </div>
@@ -100,10 +70,13 @@
         <div id="editor">
         </div>
     </div>
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+    <?php include("_script.php"); ?>
     <script>
+        var documentId = "<?php echo $id; ?>";
         CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
-
+            ckfinder: {
+                uploadUrl: "upload_img.php?id=" + documentId + "&command=QuickUpload&type=Files&responseType=json"
+            },
             toolbar: {
                 items: [
                     'undo', 'redo',
@@ -126,25 +99,18 @@
                     reversed: true
                 }
             },
-            placeholder: 'Create document from CMS: Construction method statement',
+            // placeholder: 'Create document from CMS: Construction method statement',
             fontFamily: {
-                options: [
-                    'default',
-                    'Arial, Helvetica, sans-serif',
-                    'Courier New, Courier, monospace',
-                    'Georgia, serif',
-                    'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                    'Tahoma, Geneva, sans-serif',
-                    'Times New Roman, Times, serif',
-                    'Trebuchet MS, Helvetica, sans-serif',
-                    'Verdana, Geneva, sans-serif'
-                ],
-                supportAllValues: true
+                options: ['Browallia New'],
+                supportAllValues: true,
+                default: 'Browallia New'
             },
             fontSize: {
-                options: [10, 12, 14, 'default', 18, 20, 22],
-                supportAllValues: true
+                options: [20],
+                supportAllValues: true,
+                default: '20px'
             },
+
             link: {
                 decorators: {
                     addTargetToExternalLinks: true,
@@ -158,10 +124,10 @@
                     }
                 }
             },
-            uploadAdapter: {
-                uploadUrl: "upload_img.php", // URL ของไฟล์ upload_img.php
-                withCredentials: true, // กำหนดให้ใช้งาน cookies และโทเค็นของอินเทอร์เฟซสำหรับการอัปโหลดภาพ
-            },
+            // uploadAdapter: {
+            //     uploadUrl: "upload_img.php", // URL ของไฟล์ upload_img.php
+            //     withCredentials: true, // กำหนดให้ใช้งาน cookies และโทเค็นของอินเทอร์เฟซสำหรับการอัปโหลดภาพ
+            // },
             removePlugins: [
                 // These two are commercial, but you can try them out without registering to a trial.
                 // 'ExportPdf',
@@ -201,8 +167,6 @@
             ]
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </body>
 
 </html>

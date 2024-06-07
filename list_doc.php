@@ -1,63 +1,142 @@
+<?php
+session_start();
+include("connect.php");
+$conDB = new db_conn();
+
+if (isset($_GET['discipline'])) {
+    $_SESSION['discipline'] = $_GET['discipline'];
+}
+
+$start_date = isset($_SESSION['start_date']) ? $_SESSION['start_date'] : '';
+$end_date = isset($_SESSION['end_date']) ? $_SESSION['end_date'] : '';
+$discipline = isset($_SESSION['discipline']) ? $_SESSION['discipline'] : '';
+$work = isset($_SESSION['work']) ? $_SESSION['work'] : '';
+$type = isset($_SESSION['type']) ? $_SESSION['type'] : '';
+$search = isset($_SESSION['search']) ? $_SESSION['search'] : '';
+if ($start_date == "") {
+    $start_date = date("Y-01-01");
+}
+if ($end_date == "") {
+    $end_date = date('Y-m-d');
+}
+if ($discipline != "") {
+    $condition = " AND `discipline` = '" . $discipline . "'";
+} else {
+    $condition = "";
+}
+if ($work != "") {
+    $condition .= " AND `work` = '" . $work . "'";
+} else {
+    $condition .= "";
+}
+if ($type != "") {
+    $condition .= " AND `type` = '" . $type . "'";
+} else {
+    $condition .= "";
+}
+
+if ($search != "") {
+    $condition .= " AND (`doc_no` LIKE '%$search%' OR `doc_name` LIKE '%$search%' OR `date` LIKE '%$search%' OR `prepared_by` LIKE '%$search%')";
+} else {
+    $condition .= "";
+}
+
+$sql = "SELECT * FROM `documents` WHERE `approved` = 1" . $condition;
+$result = $conDB->sqlQuery($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <title>List Documents</title>
+    <?php include("_header.php"); ?>
+    <title>CMS: List Documents</title>
 </head>
 
 <body>
-    <div class="full-container-header-color">
-        <div class="d-flex justify-content-between align-items-center">
-            <button class="btn btn-custom" onclick="history.back()" title="Back">
-                <i class="bi bi-arrow-left fs-2"></i>
-            </button>
-            <button class="btn btn-custom" onclick="location.href='index.php';" title="Home">
-                <img src="insert_img/logo.svg" alt="home" width="200" height="100">
-            </button>
-            <button class="btn btn-custom" onclick="window.location.href='list_doc.php'" title="Refresh">
-                <i class="bi bi-arrow-clockwise fs-2"></i>
+    <div class="row">
+        <div class="col-md-2 d-flex justify-content-center">
+            <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
+                <img src="insert_img/add.png" alt="add" width="60" height="60">
             </button>
         </div>
-        <div class="search-container">
-            <div class="row">
-                <div class="col-md-2 d-flex justify-content-center">
-                    <button class="btn custom" onclick="location.href='create_doc.php'" title="add file">
-                        <img src="insert_img/add.png" alt="add" width="70" height="70">
-                    </button>
-                </div>
-                <div class="col-md-2">
-                    <label for="discipline">Discipline: </label>
-                    <select name="discipline" id="discipline" class="form-select" onchange="updateWorkOptions()">
-                        <option value="">All</option>
-                        <option value="Civil">Civil</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Mechanical">Mechanical</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="work">Work: </label>
-                    <select name="work" id="work" class="form-select"></select>
-                </div>
-                <div class="col-md-4">
-                    <label for="search">Search: </label>
-                    <input type="text" id="searchText" class="form-control" placeholder="Search" onkeyup="searchDocuments()">
-                </div>
-                <div class="col-md-2 offset-md-2">
+        <div class="col-md-2">
+            <label for="discipline">Discipline: </label>
+            <select class="form-select" onchange="setFillter('discipline',this.value)">
+                <option value="" <?php if ($discipline == '') {
+                                        echo "selected";
+                                    } ?>>All</option>
+                <?php
+                $sql2 = "SELECT DISTINCT `discipline` FROM `documents` WHERE `approved` = 1";
+                $objQuery = $conDB->sqlQuery($sql2);
+
+                while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                    <option value="<?php echo $objResult['discipline']; ?>" <?php if ($discipline == $objResult['discipline']) {
+                                                                                echo "selected";
+                                                                            } ?>>
+                        <?php echo $objResult['discipline']; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="work">Work: </label>
+            <select class="form-select" onchange="setFillter('work',this.value)">
+                <option value="" <?php if ($work == '') {
+                                        echo "selected";
+                                    } ?>>All</option>
+                <?php
+                if ($discipline != "") {
+                    $condition2 = " AND `discipline` = '$discipline'";
+                }
+                $sql2 = "SELECT DISTINCT `work` FROM `documents` WHERE `approved` = 1" . $condition2;
+                $objQuery = $conDB->sqlQuery($sql2);
+
+                while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                    <option value="<?php echo $objResult['work']; ?>" <?php if ($work == $objResult['work']) {
+                                                                            echo "selected";
+                                                                        } ?>>
+                        <?php echo $objResult['work']; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="type">Type: </label>
+            <select class="form-select" onchange="setFillter('type',this.value)">
+                <option value="" <?php if ($type == '') {
+                                        echo "selected";
+                                    } ?>>All</option>
+                <?php
+                if ($work != "") {
+                    $condition2 = " AND `work` = '$work'";
+                }
+                $sql2 = "SELECT DISTINCT `type` FROM `documents` WHERE `approved` = 1" . $condition2;
+                $objQuery = $conDB->sqlQuery($sql2);
+
+                while ($objResult = mysqli_fetch_assoc($objQuery)) { ?>
+                    <option value="<?php echo $objResult['type']; ?>" <?php if ($type == $objResult['type']) {
+                                                                            echo "selected";
+                                                                        } ?>>
+                        <?php echo $objResult['type']; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="search">Search: </label>
+            <input type="text" id="search" class="form-control" placeholder="Search" onchange="setFillter('search', this.value)" value="<?php echo $search ?>">
+        </div>
+        <!-- <div class="col-md-2 offset-md-2">
                     <label for="start">Form: </label>
                     <input type="date" id="start_date" class="form-control" name="start_date" onchange="searchDocuments()">
                 </div>
                 <div class="col-md-2">
                     <label for="end">To: </label>
                     <input type="date" id="end_date" class="form-control" name="end_date" onchange="searchDocuments()">
-                </div>
-            </div>
-        </div>
+                </div> -->
+    </div>
     </div>
 
     <div class="full-container">
@@ -74,148 +153,35 @@
                         <th>Revise</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php
-                    include("connect.php");
-                    $conDB = new db_conn();
-
-                    if (isset($_GET['discipline'])) {
-                        $discipline = $_GET['discipline'];
-                        $sql = "SELECT * FROM `documents` WHERE `discipline` = '$discipline'";
-                    } else {
-                        $sql = "SELECT * FROM documents";
-                    }
-
-                    $result = $conDB->sqlQuery($sql);
-
-                    if (mysqli_num_rows($result) > 0) {
+                <tbody><?php
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
-                            echo "<td>{$row['discipline']}</td>";
-                            echo "<td>{$row['doc_no']}</td>";
-                            echo "<td class='text-left'>{$row['doc_name']}</td>";
-                            echo "<td>{$row['date']}</td>";
-                            echo "<td>{$row['prepared_by']}</td>";
-                            echo "<td><div class='button-group'>
-                                    <button onclick=\"location.href='edit_doc.php?id=" . md5($row['id']) . "'\" class='btn custom'>
-                                        <img src='insert_img/edit-file.png' alt='edit' width='40' height='40'>
+                            $id = $row["id"];
+                        ?>
+                        <tr>
+                            <td><?php echo $id = $row["id"]; ?></td>
+                            <td><?php echo $discipline = $row["discipline"]; ?></td>
+                            <td><?php echo $doc_no = $row["doc_no"]; ?></td>
+                            <td><?php echo $doc_name = $row["doc_name"]; ?></td>
+                            <td><?php echo $date = $row["date"]; ?></td>
+                            <td><?php echo $prepared_by = $row["prepared_by"] ?></td>
+                            <td>
+                                <div class='button-group'>
+                                    <button onclick="location.href='edit_doc.php?id=<?php echo md5($row['id']) ?>'" class='btn custom'>
+                                        <img src='insert_img/edit-file.png' alt='edit' width='25' height='25'>
                                     </button>
-                                    <button onclick='showDeleteModal({$row['id']})' class='btn custom'>
-                                        <img src='insert_img/delete.png' alt='delete' width='40' height='40'>
+                                    <button onclick="setDelete('<?php echo $id ?>', '<?php echo $doc_no ?>')" class='btn custom'>
+                                        <img src='insert_img/delete.png' alt='delete' width='25' height='25'>
                                     </button>
                                 </div>
-                            </td>";
-                            echo "</tr>";
-                        }
-                    }
-                    ?>
+                            </td>
+                        </tr>
+
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this document?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function showDeleteModal(id) { //confirm delete
-            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            document.getElementById('confirmDeleteButton').onclick = function() {
-                location.href = 'delete.php?id=' + id;
-            };
-            deleteModal.show();
-        }
-
-        function searchDocuments() { //search
-            var discipline = document.getElementById('discipline').value;
-            var searchText = document.getElementById('searchText').value;
-            var start_date = document.getElementById('start_date').value;
-            var end_date = document.getElementById('end_date').value;
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.querySelector('table').innerHTML = this.responseText;
-                }
-            };
-            xhr.open('GET', 'search.php?discipline=' + discipline + '&searchText=' + searchText + '&start_date=' + start_date + '&end_date=' + end_date, true);
-            xhr.send();
-        }
-
-        function updateWorkOptions() {
-            var discipline = document.getElementById("discipline");
-            var work = document.getElementById("work");
-
-            work.innerHTML = '';
-
-            if (discipline.value === "Civil") {
-                var civilWorks = ["Architectural Works", "Civil Works", "Miscellaneous", "Structural Works"];
-                civilWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Electrical") {
-                var electricalWorks = ["Installation", "Test", "Transportation"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            } else if (discipline.value === "Mechanical") {
-                var electricalWorks = ["Air condition and Ventilation", "Sanitary and Fire protection"];
-                electricalWorks.forEach(function(option) {
-                    var optionElement = document.createElement("option");
-                    optionElement.textContent = option;
-                    optionElement.value = option;
-                    work.appendChild(optionElement);
-                });
-            }
-        }
-
-        document.getElementById('discipline').addEventListener('change', function() {
-            var discipline = this.value;
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.querySelector('table').innerHTML = this.responseText;
-                }
-            };
-            xhr.open('GET', 'test_search.php?discipline=' + discipline, true);
-            xhr.send();
-        });
-
-        document.getElementById('work').addEventListener('change', function() {
-            var work = this.value;
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.querySelector('table').innerHTML = this.responseText;
-                }
-            };
-            xhr.open('GET', 'test_search.php?work=' + work, true);
-            xhr.send();
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <?php include("_script.php"); ?>
 </body>
 
 </html>

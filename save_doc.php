@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
 
     $date = date("Y-m-d");
     $randomNum = uniqid();
-    $doc_file = $idDir . '/' . $doc_no . '.docx';
+    $doc_file = $idDir . $doc_no . '.docx';
 
     // ลองตรวจสอบและลบไฟล์เดิมหากมีอยู่
     if (file_exists($doc_file)) {
@@ -98,12 +98,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //check method
     // บันทึกไฟล์ DOCX
     $phpWord->save($doc_file);
 
-    echo $tag_html = htmlspecialchars($content, ENT_QUOTES, 'UTF-8'); //tag_html
+    $tag_html = htmlspecialchars($content, ENT_QUOTES, 'UTF-8'); //tag_html
 
     // สร้างไฟล์ PDF
     $mpdf = new Mpdf(['mode' => 'UTF-8']);
     $mpdf->WriteHTML($content);
-    $pdf_file = $idDir . '/' . $doc_no . '.pdf';
+    $pdf_file = $idDir . $doc_no . '.pdf';
     $mpdf->Output($pdf_file, 'F'); //pdf_file
 
     $query = "UPDATE `documents` SET `doc_file` = '$doc_file', `tag_html` = '$tag_html', `pdf_file` = '$pdf_file', `date` = '$date' WHERE md5(`id`) = '$id'"; //update DB
