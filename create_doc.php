@@ -21,19 +21,14 @@ $create_type = isset($_SESSION['create_type']) ? $_SESSION['create_type'] : '';
 <body>
     <div class="full-container-header">
         <form action="create_doc_be.php" method="post" enctype="multipart/form-data">
-            <div class="container d-flex justify-content-start">
-                <div class="mb-2 col-4">
-                    <label for="doc_name" class="form-label">Document Title:</label>
-                    <input type="text" name="doc_name" id="doc_name" class="form-control" required>
-                </div>
-            </div>
+            
             <div class="container d-flex justify-content-start">
                 <div class="mb-2 col-4">
                     <label for="create_discipline">Discipline: </label>
                     <select name="discipline" id="discipline" class="form-select" onchange="setFillter('create_discipline',this.value)">
                         <option value="" <?php if ($create_discipline == '') {
                                                 echo "selected";
-                                            } ?>>แสดงทั้งหมด</option>
+                                            } ?>>All</option>
                         <?php
                         $sql2 = "SELECT DISTINCT `discipline` FROM `type`";
                         $objQuery = $conDB->sqlQuery($sql2);
@@ -52,7 +47,7 @@ $create_type = isset($_SESSION['create_type']) ? $_SESSION['create_type'] : '';
                     <select name="work" id="work" class="form-select" onchange="setFillter('create_work',this.value)">
                         <option value="" <?php if ($create_work == '') {
                                                 echo "selected";
-                                            } ?>>แสดงทั้งหมด</option>
+                                            } ?>>All</option>
                         <?php
                         if ($create_discipline != "") {
                             $condition2 = " AND `discipline` = '$create_discipline'";
@@ -74,7 +69,7 @@ $create_type = isset($_SESSION['create_type']) ? $_SESSION['create_type'] : '';
                     <select name="type" id="type" class="form-select" onchange="setFillter('create_type',this.value)">
                         <option value="" <?php if ($create_type == '') {
                                                 echo "selected";
-                                            } ?>>แสดงทั้งหมด</option>
+                                            } ?>>All</option>
                         <?php
                         if ($create_work != "") {
                             $condition2 = " AND `work` = '$create_work'";
@@ -91,8 +86,15 @@ $create_type = isset($_SESSION['create_type']) ? $_SESSION['create_type'] : '';
                 </div>
             </div>
 
-            <div class="container d-flex justify-content-end">
-                <div class="mb-3 col-6">
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
+                    <label for="doc_name" class="form-label">Document Title:</label>
+                    <input type="text" name="doc_name" id="doc_name" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="container d-flex justify-content-start">
+                <div class="mb-2 col-4">
                     <label for="prepared_by" class="form-label">Prepared By:</label>
                     <input type="text" name="prepared_by" id="prepared_by" class="form-control" required>
                 </div>

@@ -150,6 +150,7 @@ $result = $conDB->sqlQuery($sql);
                         <th>Document Title</th>
                         <th>Date</th>
                         <th>Prepared By</th>
+                        <th>Preview</th>
                         <th>Revise</th>
                     </tr>
                 </thead>
@@ -164,12 +165,15 @@ $result = $conDB->sqlQuery($sql);
                             <td><?php echo $doc_name = $row["doc_name"]; ?></td>
                             <td><?php echo $date = $row["date"]; ?></td>
                             <td><?php echo $prepared_by = $row["prepared_by"] ?></td>
+                            <td><button onclick="location.href='preview.php?id=<?php echo md5($row['id']) ?>'" class="btn-custom" title="Preview">
+                                <img src="insert_img/preview.png" alt="preview" width="25" height="25">
+                            </button></td>
                             <td>
                                 <div class='button-group'>
-                                    <button onclick="location.href='edit_doc.php?id=<?php echo md5($row['id']) ?>'" class='btn custom'>
+                                    <button onclick="location.href='content.php?id=<?php echo md5($row['id']) ?>'" class='btn-custom' title="Edit document">
                                         <img src='insert_img/edit-file.png' alt='edit' width='25' height='25'>
                                     </button>
-                                    <button onclick="setDelete('<?php echo $id ?>', '<?php echo $doc_no ?>')" class='btn custom'>
+                                    <button onclick="setDelete('<?php echo $id ?>', '<?php echo $doc_no ?>')" class='btn-custom' title="Delete document">
                                         <img src='insert_img/delete.png' alt='delete' width='25' height='25'>
                                     </button>
                                 </div>

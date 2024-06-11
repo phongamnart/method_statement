@@ -39,6 +39,16 @@
         console.log(id);
     }
 
+    function combineAndSubmit() {
+        var allContent = "";
+        var editors = document.querySelectorAll('[name="editor_content[]"]');
+        editors.forEach(function(editor) {
+            allContent += editor.value + "\n";
+        });
+        document.querySelector('[name="editor_content[]"]').value = allContent;
+        document.getElementById("ckeditorForm").submit();
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         const pageTitle = document.getElementById('page-title');
         const currentUrl = window.location.href;

@@ -33,13 +33,14 @@ function generateDocNo($discipline, $conDB)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $discipline = $_POST['discipline'];
     $work = $_POST['work'];
+    $type = $_POST['type'];
     $doc_no = generateDocNo($discipline, $conDB);
     $doc_name = $_POST['doc_name'];
     $date = date('Y-m-d');
     $prepared_by = $_POST['prepared_by'];
 
-    $sql = "INSERT INTO `documents` (`discipline`, `work`, `doc_no`, `doc_name`, `date`, `prepared_by`)
-            VALUES ('$discipline', '$work', '$doc_no', '$doc_name', '$date', '$prepared_by')";
+    $sql = "INSERT INTO `documents` (`discipline`, `work`, `type`, `doc_no`, `doc_name`, `date`, `prepared_by`)
+            VALUES ('$discipline', '$work', '$type', '$doc_no', '$doc_name', '$date', '$prepared_by')";
 
     $conDB->sqlQuery($sql);
 
@@ -52,6 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['work'] = "";
     $_SESSION['type'] = "";
     
-    header("Location: edit_doc.php?id=" . md5($id) . "");
+    header("Location: content.php?id=" . md5($id) . "");
     exit();
 }
