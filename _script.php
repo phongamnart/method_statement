@@ -6,6 +6,7 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
 
 
+
 <script>
     function setFillter(param, value) {
         console.log(param + value)
@@ -59,8 +60,18 @@
             pageTitle.textContent = 'CMS: List Approves';
         } else if (currentUrl.includes('create_doc.php')) {
             pageTitle.textContent = 'CMS: Create Document';
+        } else if (currentUrl.includes('edit.php')) {
+            pageTitle.textContent = 'CMS: Edit Document';
+        } else if (currentUrl.includes('approve_doc.php')) {
+            pageTitle.textContent = 'CMS: Preview Document';
+        } else if (currentUrl.includes('content.php')) {
+            pageTitle.textContent = 'CMS: Select Content';
         } else {
-            pageTitle.textContent = 'CMS';
+            pageTitle.textContent = 'CMS: Construction Method Statement';
         }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", function() {
+        document.getElementById("myForm").submit();
     });
 </script>

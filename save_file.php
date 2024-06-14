@@ -2,6 +2,7 @@
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\SimpleType\Jc;
 use Mpdf\Mpdf;
 
 include("connect.php");
@@ -20,35 +21,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phpWord = new PhpWord();
     $section = $phpWord->addSection();
 
-    if (!empty($imagePath)) {
-        $section->addImage($imagePath, array('width' => 200, 'height' => 200));
-    }
-
-    foreach ($contents as $content) {
-        if (is_string($content)) {
-            $plainTextContent = htmlspecialchars_decode(strip_tags($content)); // Decode HTML to text
-            $plainTextContent = str_replace('&nbsp;', ' ', $plainTextContent); // Replace &nbsp; with space
-            $encodedText = htmlspecialchars($plainTextContent, ENT_QUOTES, 'UTF-8'); // Encode special characters
-            $section->addText($encodedText);
-        }
-    }
-
-    $currentTime = date("YmdHis");
-    $randomNum = uniqid();
-    $doc_file = 'test_upload/word/' . $currentTime . '_' . $randomNum . '.docx';
-    $phpWord->save($doc_file);
-
-    $imageHtml = !empty($imagePath) ? '<img src="' . $imagePath . '" style="width: 200px; height: 200px;">' : '';
+    $imageHtml = !empty($imagePath) ? '<div style="text-align: center;"><img src="' . $imagePath . '" style="width: 200px; height: 200px;"></div>' : '';
     $htmlContent = '';
+
     foreach ($contents as $content) {
         if (is_string($content)) {
             $plainTextContent = htmlspecialchars_decode(strip_tags($content)); // Decode HTML to text
             $plainTextContent = str_replace('&nbsp;', ' ', $plainTextContent); // Replace &nbsp; with space
             $encodedText = htmlspecialchars($plainTextContent, ENT_QUOTES, 'UTF-8'); // Encode special characters
             $htmlContent .= '<p>' . $encodedText . '</p>';
+            $section->addText($encodedText);
         }
     }
-    $htmlContent = $imageHtml . $htmlContent;
+    $htmlContent = $htmlContent . $imageHtml;
+    
+    if (!empty($imagePath)) {
+        $imageStyle = array('width' => 200, 'height' => 200, 'alignment' => Jc::CENTER);
+        $section->addImage($imagePath, $imageStyle);
+    }
+
+    $currentTime = date("YmdHis");
+    $randomNum = uniqid();
+    $doc_file = 'test_upload/word/' . $currentTime . '_' . $randomNum . '.docx';
+    $phpWord->save($doc_file);
 
     $mpdf = new Mpdf([
         'fontDir' => __DIR__ . '/fonts/',

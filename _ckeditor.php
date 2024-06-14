@@ -2,11 +2,11 @@
         var documentId = "<?php echo $id; ?>";
         CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
             ckfinder: {
-                uploadUrl: "upload_img.php?id=" + documentId + "&command=QuickUpload&type=Files&responseType=json"
+                uploadUrl: "upload_image.php?id=" + documentId + "&command=QuickUpload&type=Files&responseType=json"
             },
             toolbar: {
                 items: [
-                        'undo', 'redo',
+                        'undo', 'redo', 'uploadImage',
                         'alignment', '|',
                         'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
                         'bold', 'italic', 'underline', 'subscript', 'superscript', '|',
